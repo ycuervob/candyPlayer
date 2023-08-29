@@ -10,7 +10,7 @@ RESET = \033[0m
 GREEN = \033[32m
 RED = \033[31m
 
-.PHONY: start install-http-server install-requirements-linux
+.PHONY: start install-http-server install-winapi-linux
 
 install-http-server:
 	@echo "$(GREEN)Instalando http-server...$(RESET)"
@@ -21,8 +21,9 @@ install-winapi-linux:
 	-@sudo apt update
 	-@sudo apt install libx11-dev
 
-install-requirements-linux:
-	sh ./requerimentspy.sh
+compile-cpp:
+	@echo "$(GREEN)Compilando archivo cpp...$(RESET)"
+	@g++ -o Mondongo/cpp/bin/mouse Mondongo/cpp/winapi.cpp -lX11
 
 default: 
 	@echo "$(GREEN)Makefile para ejecutar http-server en la carpeta Game$(GREEN)"

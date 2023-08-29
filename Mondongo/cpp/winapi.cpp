@@ -6,10 +6,10 @@ int main() {
     if (display) {
         int x = 500;
         int y = 500;
-
+        
         XWarpPointer(display, None, XRootWindow(display, DefaultScreen(display)),
-                     0, 0, 0, 0, x, y);
-
+                     0, 0, 0, 0, 0, 0);
+    
         XFlush(display);
         XCloseDisplay(display);
     }
