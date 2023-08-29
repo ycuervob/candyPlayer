@@ -13,7 +13,9 @@ Tiene los archivos necesarios para pasar al agente la información leída de la 
 Para instalar requerimientos de python ejecutar:
 
 ```Shell
-    apt install python3.10-venv
+    sudo apt-get install scrot
+    sudo apt-get install python3-tk python3-dev
+    sudo apt install python3.10-venv
     python3 -m venv Mondongo/candyenv
     source Mondongo/candyenv/bin/activate
     pip install -r Mondongo/python/requirements.txt
