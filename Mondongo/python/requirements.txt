@@ -1,0 +1,3 @@
+# Instala las bibliotecas
+pyautogui
+opencv-python

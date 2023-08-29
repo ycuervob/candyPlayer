@@ -10,12 +10,19 @@ RESET = \033[0m
 GREEN = \033[32m
 RED = \033[31m
 
-.PHONY: start install-http-server
+.PHONY: start install-http-server install-requirements-linux
 
 install-http-server:
 	@echo "$(GREEN)Instalando http-server...$(RESET)"
 	$(NODE) -v
 	sudo $(NPM) -g install http-server
+
+install-winapi-linux:
+	-@sudo apt update
+	-@sudo apt install libx11-dev
+
+install-requirements-linux:
+	sh ./requerimentspy.sh
 
 default: 
 	@echo "$(GREEN)Makefile para ejecutar http-server en la carpeta Game$(GREEN)"
