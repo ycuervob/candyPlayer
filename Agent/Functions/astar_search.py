@@ -1,5 +1,5 @@
 import heapq
-from ..Structures.Node import Node
+from Structures import Node
 
 def astar_search(initial_state, goal_state, actions_fn, heuristic_fn):
     open_list = []

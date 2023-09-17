@@ -1,27 +1,27 @@
+import numpy as np
 from Functions.astar_search import astar_search
 
-# Define your Agent class
+# Classe agente
 class Agent:
-    def __init__(self, initial_state, goal_state):
-        self.initial_state = initial_state
-        self.goal_state = goal_state
 
-    def actions(self, state):
-        # Define the available actions for the agent in the given state
+    # Construtor No tiene estado objetivo porque no existe
+    # un estado objetivo en el problema realmente
+    def __init__(self, initial_state : np.ndarray):
+        self.initial_state = initial_state
+
+     # Define las acciones posibles dado una matriz de dulces
+    def actions(self, state : np.ndarray, matrixCandy : np.ndarray):
         pass
 
+    # Define una heuristica o funcion que maximize el resultado
     def heuristic(self, state):
-        # Define a heuristic function to estimate the cost to reach the goal from a given state
         pass
 
     def solve(self):
         return astar_search(self.initial_state, self.goal_state, self.actions, self.heuristic)
 
-# Define your State and Action classes as needed
-
 # Example usage
-initial_state = ...
-goal_state = ...
-agent = Agent(initial_state, goal_state)
-solution = agent.solve()
-print("Solution:", solution)
+
+if(__name__ == "__main__"):
+    agenteTest = Agent(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]]))
+    print("Solution:", agenteTest)
