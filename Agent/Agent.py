@@ -9,18 +9,18 @@ class Agent:
     def __init__(self, initial_state : np.ndarray):
         self.initial_state = initial_state
 
-    # Define las acciones posibles dado una matriz de dulces, y retorna estas acciones junto con sus valores calculados.
-    # y las posiciones a mover de cada matriz
-    def actions(self, matrixCandy : np.ndarray) -> list[(np.ndarray, int, (int, int), (int, int))]:
+    # Define las acciones posibles dado una matriz de dulces
+    # Devuelve una lista de tuplas con: (punto inicial, punto final, costo, matriz resultante)
+    def actions(self, matrixCandy : np.ndarray) -> list[((int, int), (int, int), int, np.ndarray)]:
         pass
 
-    # Esta función recibe una matriz de dulces y devuelve un valor con el consto y las posiciones de los dulces a mover para el máximo
-    # de esa sola matriz
+    # Esta función recibe una matriz de dulces
+    # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
     def matrixValue(self, matrixCandy : np.ndarray) -> [(int, int), (int, int), int]:
         pass
 
-    # Devuelve el movimiento que debe realizar el agente pos x e y
-    def compute(self, perception : np.ndarray) -> ((int, int), (int, int), int):
+    # Devuelve una tupla de tuplas con: (punto inicial, punto final, costo)
+    def compute(self, perception : str, matrixCandy : np.ndarray = None) -> ((int, int), (int, int), int):
         return astar_search(self.initial_state, self.goal_state, self.actions, self.heuristic)
 
 # Example usage
