@@ -26,5 +26,5 @@ class Agent:
 # Example usage
 
 if(__name__ == "__main__"):
-    agenteTest = Agent(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]]))
+    agenteTest = Agent(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])) # Esto es solo un ejemplo esta no es la matriz real
     print("Solution:", agenteTest)
