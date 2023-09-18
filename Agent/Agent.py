@@ -27,7 +27,6 @@ class Agent:
             return self.matrixValue(matrixCandy)
         elif(perception == "s"):
             actions = self.actions(matrixCandy)
-            maxvalue = 0
             return max(actions, key=lambda x: x[2])
         else:
             return None
