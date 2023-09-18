@@ -21,7 +21,16 @@ class Agent:
 
     # Devuelve una tupla de tuplas con: (punto inicial, punto final, costo)
     def compute(self, perception : str, matrixCandy : np.ndarray = None) -> ((int, int), (int, int), int):
-        return astar_search(self.initial_state, self.goal_state, self.actions, self.heuristic)
+        if(perception == "a"):
+            return self.actions(matrixCandy)
+        elif(perception == "v"):
+            return self.matrixValue(matrixCandy)
+        elif(perception == "s"):
+            actions = self.actions(matrixCandy)
+            maxvalue = 0
+            return max(actions, key=lambda x: x[2])
+        else:
+            return None
 
 # Example usage
 
