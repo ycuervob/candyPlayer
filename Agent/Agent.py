@@ -10,8 +10,8 @@ class Agent:
         self.initial_state = initial_state
 
     # Define las acciones posibles dado una matriz de dulces
-    # Devuelve una lista de tuplas con: (punto inicial, punto final, costo, matriz resultante)
-    def actions(self, matrixCandy : np.ndarray) -> list[((np.int8, np.int8), (np.int8, np.int8), np.int8, np.ndarray)]:
+    # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
+    def actions(self, matrixCandy : np.ndarray) -> list[((np.int8, np.int8), (np.int8, np.int8), np.int8)]:
         pass
 
     # Esta función recibe una matriz de dulces
