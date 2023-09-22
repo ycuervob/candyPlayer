@@ -4,6 +4,8 @@ from Functions.astar_search import astar_search
 # Classe agente
 class Agent:
 
+    multiplier = 60
+
     # Construtor No tiene estado objetivo porque no existe
     # un estado objetivo en el problema realmente
     def __init__(self, initial_state : np.ndarray):
@@ -15,39 +17,45 @@ class Agent:
         pass
 
     # Esta función recibe una matriz de dulces
-    # Devuelve solo el costo de la matriz porque ya se sabe que puntos se mueven
-    def matrixValue(self, matrixCandy : np.ndarray, punto1 : (np.int8, np.int8), punto2 : (np.int8, np.int8)) -> np.int8:
-        value = 0
+    # Devuelve solo el costo de la matriz y la matriz resultante con gravedad porque ya se sabe que puntos se mueven
+    def matrixValue(self, originalMatrix : np.ndarray, punto1 : (np.int8, np.int8), punto2 : (np.int8, np.int8), value : np.uint8 = 0) -> (np.int8, np.ndarray):
+        matrixCandy = np.copy(originalMatrix)
         # Cambia los valores de la matriz a ver que mondá
-        pivot = matrixCandy[punto1[0]][punto1[1]]
-        matrixCandy[punto1[0]][punto1[1]] = matrixCandy[punto2[0]][punto2[1]]
-        matrixCandy[punto2[0]][punto2[1]] = pivot
+
+        if value == 0:
+            pivot = matrixCandy[punto1[0]][punto1[1]]
+            matrixCandy[punto1[0]][punto1[1]] = matrixCandy[punto2[0]][punto2[1]]
+            matrixCandy[punto2[0]][punto2[1]] = pivot
         
         # Se les resta uno para ir calculando si hay 3 o más dulces iguales, la matriz es cuadrada
         length = len(matrixCandy[0]) - 1 
 
+        # Direcciones a buscar
+        # Direcciones en las que buscar coincidencias
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),(-2, 0),(2, 0),(0, -2),(0, 2)]
+
         for i in range(1,length):
             for j in range(1,length):
-                if(matrixCandy[i][j] == matrixCandy[i-1][j] and matrixCandy[i][j] == matrixCandy[i+1][j]):
-                    value += 60
-                    matrixCandy[i][j] = 0x00
-                    matrixCandy[i-1][j] = 0x00
-                    matrixCandy[i+1][j] = 0x00
-                    # En este caso caen 3 dulces en vertical
-                    self.aplicar_gravedad(matrixCandy)
-                    break
-                elif(matrixCandy[i][j] == matrixCandy[i][j-1] and matrixCandy[i][j] == matrixCandy[i][j+1]):
-                    value += 60
-                    matrixCandy[i][j] = 0x00
-                    matrixCandy[i][j-1] = 0x00
-                    matrixCandy[i][j+1] = 0x00
+                candy = matrixCandy[i][j]
+                count = 0
+                for di,dj in directions:
+                    if i+di < 0 and i+di > length and j+dj < 0 and j+dj > length:
+                        if candy == matrixCandy[i+di][j+dj]:
+                            matrixCandy[i+di][j+dj] = 0x00
+                            count += 1
+
+                if count >= 3:
+                    value += self.multiplier + (3-count)*self.multiplier
                     # Este simula el caso en el que caen 3 dulces en horizontal
                     self.aplicar_gravedad(matrixCandy)
+                    # Se llama recursivamente para ver si hay más dulces de 3 o mas juntos
+                    self.matrixValue(matrixCandy, 0, 0, value)
                     break
             else:
                 continue
             break
         
+        return value, matrixCandy
         
 
     # Esta función recibe una matriz de dulces con ceros y hace caer por gravedad los dulces
