@@ -57,7 +57,7 @@ class Agent:
                     self.aplicar_gravedad(matrixCandy)
                     # Se llama recursivamente para ver si hay más dulces de 3 o mas juntos
                     self.matrixValue(matrixCandy, 0, 0, value)
-                    break
+                    break #ACA BREAK NO SIRVE PORQUE PUEDE QUE SE ESTÉ HACIENDO UN VERTICAL U HORIZONTAL DE 2 CUANDO PUEDE SER DE 4
             else:
                 continue
             break
