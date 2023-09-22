@@ -15,8 +15,8 @@ class Agent:
         pass
 
     # Esta función recibe una matriz de dulces
-    # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
-    def matrixValue(self, matrixCandy : np.ndarray, punto1 : (np.int8, np.int8), punto2 : (np.int8, np.int8)) -> [(np.int8, np.int8), (np.int8, np.int8), np.int8]:
+    # Devuelve solo el costo de la matriz porque ya se sabe que puntos se mueven
+    def matrixValue(self, matrixCandy : np.ndarray, punto1 : (np.int8, np.int8), punto2 : (np.int8, np.int8)) -> np.int8:
         value = 0
         # Cambia los valores de la matriz a ver que mondá
         pivot = matrixCandy[punto1[0]][punto1[1]]
@@ -33,21 +33,43 @@ class Agent:
                     matrixCandy[i][j] = 0x00
                     matrixCandy[i-1][j] = 0x00
                     matrixCandy[i+1][j] = 0x00
-                    # Simular la caida suponiendo que caen ceros
+                    # En este caso caen 3 dulces en vertical
+                    self.aplicar_gravedad(matrixCandy)
                     break
                 elif(matrixCandy[i][j] == matrixCandy[i][j-1] and matrixCandy[i][j] == matrixCandy[i][j+1]):
                     value += 60
                     matrixCandy[i][j] = 0x00
                     matrixCandy[i][j-1] = 0x00
                     matrixCandy[i][j+1] = 0x00
-                    # Simular la caida suponiendo que caen ceros
+                    # Este simula el caso en el que caen 3 dulces en horizontal
+                    self.aplicar_gravedad(matrixCandy)
                     break
             else:
                 continue
             break
-
         
-        pass
+        
+
+    # Esta función recibe una matriz de dulces con ceros y hace caer por gravedad los dulces
+    def aplicar_gravedad(matrixCandy : np.ndarray):
+        filas = len(matrixCandy)
+        columnas = filas
+
+        for col in range(columnas):
+            # Crear una lista temporal para almacenar los valores no nulos de la columna actual
+            valores_no_nulos = np.array([], dtype=np.int8)
+            
+            for fila in range(filas):
+                if matrixCandy[fila][col] != 0x00:
+                    valores_no_nulos = np.append(valores_no_nulos, matrixCandy[fila][col])
+
+            # Llenar la columna con ceros
+            for fila in range(filas):
+                if fila < len(valores_no_nulos):
+                    matrixCandy[fila][col] = valores_no_nulos[fila]
+                else:
+                    matrixCandy[fila][col] = 0
+
 
     # Devuelve una tupla de tuplas con: (punto inicial, punto final, costo)
     def compute(self, perception : str, matrixCandy : np.ndarray = None, punto1 : (np.int8, np.int8) = None, punto2 : (np.int8, np.int8) = None) -> ((np.int8, np.int8), (np.int8, np.int8), np.int8):
