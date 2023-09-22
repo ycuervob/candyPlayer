@@ -32,19 +32,26 @@ class Agent:
 
         # Direcciones a buscar
         # Direcciones en las que buscar coincidencias
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),(-2, 0),(2, 0),(0, -2),(0, 2)]
+        directions = [1, 1, -2, 2]
 
         for i in range(1,length):
             for j in range(1,length):
                 candy = matrixCandy[i][j]
-                count = 0
-                for di,dj in directions:
-                    if i+di < 0 and i+di > length and j+dj < 0 and j+dj > length:
-                        if candy == matrixCandy[i+di][j+dj]:
-                            matrixCandy[i+di][j+dj] = 0x00
-                            count += 1
+                countH = 0
+                countV = 0
+                for d in directions:
+                    if i+d < 0 and i+d > length:
+                        if candy == matrixCandy[i+d][j+d]:
+                            matrixCandy[i+d][j+d] = 0x00
+                            countV += 1
+                    if j+d < 0 and j+d > length:
+                        if candy == matrixCandy[i+d][j+d]:
+                            matrixCandy[i+d][j+d] = 0x00
+                            countH += 1
 
-                if count >= 3:
+
+                if countH >= 3 or countV >= 3:
+                    count = max(countH, countV)
                     value += self.multiplier + (3-count)*self.multiplier
                     # Este simula el caso en el que caen 3 dulces en horizontal
                     self.aplicar_gravedad(matrixCandy)
