@@ -14,6 +14,8 @@ class Agent:
     # Define las acciones posibles dado una matriz de dulces
     # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
     def actions(self, matrixCandy : np.ndarray) -> list[((np.int8, np.int8), (np.int8, np.int8), np.int8)]:
+
+        
         pass
 
     # Esta función recibe una matriz de dulces
@@ -34,16 +36,26 @@ class Agent:
         for i in range(0,length):
             countH = set()
             countV = set()
-            for j in range(1,length):
-                if matrixCandy[i][j] == matrixCandy[i][j-1] and matrixCandy[i][j] == matrixCandy[i][j-2] and matrixCandy[i][j] != 0x00:
+            for j in range(1,length):    
+                samecandyH, espetialCandyH = self.sameCandy(matrixCandy[i][j], matrixCandy[i][j-1], matrixCandy[i][j-2])     
+                if samecandyH and matrixCandy[i][j] != 0x00:
                     countH.add(j)
                     countH.add(j-1)
                     countH.add(j-2)
-                    
-                if matrixCandy[j][i] == matrixCandy[j-1][i] and matrixCandy[j][i] == matrixCandy[j-2][i] and matrixCandy[j][i] != 0x00:
+                
+                if samecandyH and espetialCandyH:
+                    for k in range(length):
+                        countH.add(k)
+                
+                samecandyV, espetialCandyV = self.sameCandy(matrixCandy[j][i], matrixCandy[j-1][i], matrixCandy[j-2][i])
+                if samecandyV and matrixCandy[j][i] != 0x00:
                     countV.add(j)
                     countV.add(j-1)
                     countV.add(j-2)
+
+                if samecandyV and espetialCandyV:
+                    for k in range(length):
+                        countV.add(k)
             
             for k in countH:
                 matrixCandy[i][k] = 0
@@ -53,19 +65,29 @@ class Agent:
                 matrixCandy[k][i] = 0
                 value += 1
 
+        print(matrixCandy)
+        print(value)
         # Este simula el caso en el que caen 3 dulces en horizontal
         self.applyGravity(matrixCandy)
         # Se llama recursivamente para ver si hay más dulces de 3 o mas juntos
         print(matrixCandy)
-        print(valueInit//3)
-        print(value//3)
+        print(valueInit)
+        print(value)
 
         if value > valueInit:
             self.matrixValue(matrixCandy, (0,0), (0,0), value)
 
-        
-        
-        return value//3, matrixCandy
+        return value, matrixCandy
+    
+    def sameCandy(self,*candies : np.int8):
+        same = True
+        primeCandy = False
+        for candy in candies:
+            if candy != candies[0] and abs(candy - candies[0]) != 0x09:
+                same = False
+            if abs(candy - candies[0]) == 0x09:
+                primeCandy = True
+        return same, primeCandy
 
     # Esta función recibe una matriz de dulces con ceros y hace caer por gravedad los dulces
     def applyGravity(self, matrixCandy : np.ndarray):
@@ -103,19 +125,19 @@ class Agent:
 
 # Example usage
 if(__name__ == "__main__"):
-    agenteTest = Agent(np.array([], dtype=np.uint8)) # Esto es solo un ejemplo esta no es la matriz real
+    agenteTest = Agent(np.array([], dtype=np.int8)) # Esto es solo un ejemplo esta no es la matriz real
     # Ejemplo de matrix de 9x9 con una secuencia de 5 consecutivas
     matrix_ejemplo = np.array([
-        [1, 3, 1, 2, 2, 2, 2, 2, 2],
-        [4, 4, 4, 5, 5, 5, 4, 5, 5],
-        [7, 7, 7, 8, 8, 8, 8, 8, 8],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        [9, 8, 7, 6, 5, 4, 3, 2, 1],
-        [1, 1, 1, 2, 2, 2, 3, 3, 3],
-        [4, 4, 4, 5, 5, 5, 6, 6, 6],
-        [7, 7, 7, 8, 8, 8, 9, 9, 9],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    ], dtype=np.uint8)
+        [1, 12, 1, 2, 2, 2, 2, 2, 2],
+        [4, 3, 4, 5, 1, 5, 4, 5, 5],
+        [2, 2, 2, 6, 4, 8, 4, 6, 6],
+        [1, 3, 3, 4, 5, 6, 2, 6, 5],
+        [5, 6, 2, 6, 5, 4, 3, 2, 1],
+        [1, 2, 1, 2, 1, 2, 3, 5, 3],
+        [4, 5, 4, 5, 1, 5, 6, 2, 6],
+        [2, 6, 2, 6, 2, 6, 5, 6, 5],
+        [1, 2, 3, 4, 5, 6, 2, 6, 5]
+    ], dtype=np.int8)
 
     print(matrix_ejemplo)
     agenteTest.matrixValue(matrix_ejemplo, (0,0), (0,0))
