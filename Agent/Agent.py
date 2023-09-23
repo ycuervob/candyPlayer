@@ -13,10 +13,45 @@ class Agent:
     # Define las acciones posibles dado una matriz de dulces
     # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
     def actions(self, matrixCandy : np.ndarray) -> list[((np.int8, np.int8), (np.int8, np.int8), np.int8)]:
+        length = len(matrixCandy) #La matriz es cuadrada
+        movements = []
 
+        for i in range(1,length):  
+            vectorH = matrixCandy[i-1]
+            vectorH1 = matrixCandy[i]
+            vectorV = matrixCandy[:,i-1]
+            vectorV1 = matrixCandy[:,i]
+            for j in range(length-2):
+                caso1H, isprime = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH[j+2]) #Caso 1
+                caso2H, isprime = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH[j+2]) #Caso 2
+                caso3H, isprime = self.sameCandy(vectorH[j], vectorH[j+1], vectorH1[j+2]) #Caso 3
+                caso4H, isprime = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH1[j+2]) #Caso 4
+
+                if caso1H:
+                    movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
+                if caso2H:
+                    movements.append(((i-1,j+1), (i,j+1), self.matrixValue(matrixCandy, (i-1,j+1), (i,j+1))[0]))
+                if caso3H:
+                    movements.append(((i-1,j+2), (i,j+2), self.matrixValue(matrixCandy, (i-1,j+2), (i,j+2))[0]))
+                if caso4H:
+                    movements.append(((i-1,j+1), (i,j+1), self.matrixValue(matrixCandy, (i-1,j+1), (i,j+1))[0]))
+
+                caso1V, isprime = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
+                caso2V, isprime = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV[j+2]) #Caso 2
+                caso3V, isprime = self.sameCandy(vectorV[j], vectorV[j+1], vectorV1[j+2]) #Caso 3
+                caso4V, isprime = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV1[j+2]) #Caso 4
+
+                if caso1V:
+                    movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
+                if caso2V:
+                    movements.append(((j+1,i-1), (j+1,i), self.matrixValue(matrixCandy, (j+1,i-1), (j+1,i))[0]))
+                if caso3V:
+                    movements.append(((j+2,i-1), (j+2,i), self.matrixValue(matrixCandy, (j+2,i-1), (j+2,i))[0]))
+                if caso4V:
+                    movements.append(((j+1,i-1), (j+1,i), self.matrixValue(matrixCandy, (j+1,i-1), (j+1,i))[0]))
+                
+        return movements
         
-        pass
-
     # Esta función recibe una matriz de dulces
     # Devuelve solo el costo de la matriz y la matriz resultante con gravedad porque ya se sabe que puntos se mueven
     def matrixValue(self, originalMatrix : np.ndarray, punto1 : (np.int8, np.int8), punto2 : (np.int8, np.int8), value : np.uint8 = 0) -> (np.int8, np.ndarray):
@@ -136,5 +171,27 @@ if(__name__ == "__main__"):
     ncandy, newMatrix  = agenteTest.matrixValue(matrix_ejemplo, (0,0), (0,0))
     print("Candy:", ncandy)
     print(newMatrix)
+
+    print("Actions:")
+
+    matrix_ejemplo2 = np.array([
+        [1,12, 1, 2, 4, 2, 6, 2, 2],
+        [4, 2, 4, 5, 1, 5, 4, 5, 5],
+        [2, 1, 2, 6, 1, 8, 4, 6, 6],
+        [1, 3, 3, 4, 5, 6, 2, 6, 5],
+        [5, 6, 2, 6, 5, 4, 3, 2, 1],
+        [1, 2, 1, 2, 1, 5, 3, 5, 3],
+        [4, 5, 4, 5, 1, 5, 6, 2, 6],
+        [2, 6, 2, 6, 2, 6, 5, 6, 5],
+        [1, 2, 3, 4, 5, 6, 2, 6, 5]
+    ], dtype=np.int8)
+
+    print(matrix_ejemplo2)
+    actions = agenteTest.actions(matrix_ejemplo2)
+    print("Actions: ->")
+    print(actions)
+
+    print("Solution: ")
+    print(agenteTest.compute("s", matrix_ejemplo2))
 
     print("Solution:", agenteTest)
