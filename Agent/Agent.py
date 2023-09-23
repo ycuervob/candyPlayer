@@ -64,18 +64,12 @@ class Agent:
             for k in countV:
                 matrixCandy[k][i] = 0
                 value += 1
-
-        print(matrixCandy)
-        print(value)
+                
         # Este simula el caso en el que caen 3 dulces en horizontal
         self.applyGravity(matrixCandy)
         # Se llama recursivamente para ver si hay más dulces de 3 o mas juntos
-        print(matrixCandy)
-        print(valueInit)
-        print(value)
-
         if value > valueInit:
-            self.matrixValue(matrixCandy, (0,0), (0,0), value)
+            value, matrixCandy = self.matrixValue(matrixCandy, (0,0), (0,0), value)
 
         return value, matrixCandy
     
@@ -140,6 +134,8 @@ if(__name__ == "__main__"):
     ], dtype=np.int8)
 
     print(matrix_ejemplo)
-    agenteTest.matrixValue(matrix_ejemplo, (0,0), (0,0))
+    ncandy, newMatrix  = agenteTest.matrixValue(matrix_ejemplo, (0,0), (0,0))
+    print("Candy:", ncandy)
+    print(newMatrix)
 
     print("Solution:", agenteTest)
