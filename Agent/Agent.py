@@ -1,5 +1,4 @@
 import numpy as np
-from Functions.astar_search import astar_search
 
 # Classe agente
 class Agent:
