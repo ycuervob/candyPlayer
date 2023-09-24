@@ -19,10 +19,9 @@ def mostrar_color_rgb(color_rgb):
 #Clase que convierte la imagen al un arreglo de 9x9 de numpy
 class Convertion:
 
-    def __init__(self, screenCapture: ScreenCapture):
-        self.arraytipos = np.array(["", "E", "E1", "E2"])
+    def __init__(self, screenCapture: ScreenCapture, baseRoute =  "Mondongo/imgCandy/"):
         self.screenCapture = screenCapture
-        self.colores = {
+        self.colors = {
             0x01: (255, 255, 0),    #amarillo
             0x02: (255, 150, 0),    #naranja
             0x03: (0, 0, 255),      #azul
@@ -30,12 +29,19 @@ class Convertion:
             0x05: (255, 0, 255),    #morado
             0x06: (255, 0, 0)       #rojo
         }
+        self.arraytypes = np.array(["", "E", "E1", "E2"])
+        self.arrayAmarillos = [cv2.imread(baseRoute + "amarillo/amarillo"+ types +".png") for types in self.arraytypes]
+        self.arrayNaranjas = [cv2.imread(baseRoute + "naranja/naranja"+ types +".png") for types in self.arraytypes]
+        self.arrayAzules = [cv2.imread(baseRoute + "azul/azul"+ types +".png") for types in self.arraytypes]
+        self.arrayVerdes = [cv2.imread(baseRoute + "verde/verde"+ types +".png") for types in self.arraytypes]
+        self.arrayMorados = [cv2.imread(baseRoute + "morado/morado"+ types +".png") for types in self.arraytypes]
+        self.arrayRojos = [cv2.imread(baseRoute + "rojo/rojo"+ types +".png") for types in self.arraytypes]
 
     def clasificarColorBasic(self, pixel):
         distancia_minima = float('inf')
         color_clasificado = None
 
-        for nombre_color, valor_color in self.colores.items():
+        for nombre_color, valor_color in self.colors.items():
             # Calcular la distancia euclidiana entre el pixel y el valor RGB del color
             distancia = np.sqrt(sum(np.power(np.array(pixel) - np.array(valor_color),2)))
             
@@ -62,7 +68,7 @@ class Convertion:
         divisionWidth = imagewidth // division
         #Creamos el arreglo de 9x9 que tendra la representación
         representationArray = np.zeros((division, division), dtype=np.int8)
-        #Creamos un arreglo 9x9 que tendrá los colores de cada dulce en la matriz
+        #Creamos un arreglo 9x9 que tendrá los colors de cada dulce en la matriz
         representativeColor = np.zeros((9,9,3), dtype=np.uint8)
 
         #Recorremos la imagen en los puntos medios de cada cuadro
@@ -77,7 +83,7 @@ class Convertion:
         for k in range(3):
             representativeColor[0][3][k] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k]
 
-        #Clasificamos los colores
+        #Clasificamos los colors
         for i in range(9):
             for j in range(9):
                 representationArray[i][j] = self.clasificarColorBasic(representativeColor[i][j])
@@ -86,13 +92,13 @@ class Convertion:
         return representationArray
     
 async def tarea1():
-    asyncio.create_subprocess_exec("make", "start")
-    await asyncio.sleep(5)
-    webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(2)
-    pointer = Pointer()
-    pointer.moveAndClick(750, 350)
-    await asyncio.sleep(30)
+    # asyncio.create_subprocess_exec("make", "start")
+    # await asyncio.sleep(5)
+    # webbrowser.open("http://127.0.0.1:3006")
+    # await asyncio.sleep(2)
+    # pointer = Pointer()
+    # pointer.moveAndClick(750, 350)
+    # await asyncio.sleep(30)
     sc = ScreenCapture()
     c = Convertion(sc)
     array = c.convert()
