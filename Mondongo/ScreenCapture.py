@@ -1,10 +1,9 @@
-import cv2
 import numpy as np
 import pyautogui
 import matplotlib.pyplot as plt
 
 # Clase de captura de pantalla
-class screenCapture:
+class ScreenCapture:
     def __init__(self, posx = 100, posy = 10, width = 650, height = 580):
         self.posx = posx
         self.posy = posy
@@ -33,8 +32,8 @@ if __name__ == "__main__":
     y = 10
     width = 650
     height = 580
-    sc = screenCapture(x, 1080-768 + y, width, height)
-    sc2 = screenCapture()
+    sc = ScreenCapture(x, 1080-768 + y, width, height)
+    sc2 = ScreenCapture()
     sc.showScreen()
     sc2.showScreen()
 

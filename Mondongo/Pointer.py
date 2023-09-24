@@ -1,7 +1,7 @@
 import pyautogui
 
 #Clase pointer para mover el mouse
-class pointer:
+class Pointer:
     def __init__(self):
         self.x = 0
         self.y = 0
@@ -28,7 +28,7 @@ class pointer:
 
 #Test de class
 if __name__ == "__main__":
-    p = pointer()
+    p = Pointer()
     p.move(100, 100)
     p.click()
     p.move(200, 200)
