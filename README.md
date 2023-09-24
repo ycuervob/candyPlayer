@@ -21,3 +21,15 @@ Para instalar requerimientos de python ejecutar:
     pip install -r requirements.txt
     deactivate 
 ```
+
+Para activar el ambiente donde se instalaron los requerimientos usar:
+
+```Shell
+    source candyenv/bin/activate
+```
+
+y para desactivarlo usar:
+
+```Shell
+    deactivate 
+```
