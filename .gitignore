@@ -1,5 +1,6 @@
 /.vscode/
 /Mondongo/candyenv/
+/Mondongo/__pycache__/
 /Mondongo/cpp/bin/
 /Agent/*/__pycache__/
 /candyenv/
