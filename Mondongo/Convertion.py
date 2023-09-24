@@ -1,5 +1,3 @@
-from ScreenCapture import ScreenCapture
-from Pointer import Pointer
 import numpy as np
 import webbrowser
 import asyncio
@@ -19,7 +17,7 @@ def mostrar_color_rgb(color_rgb):
 #Clase que convierte la imagen al un arreglo de 9x9 de numpy
 class Convertion:
 
-    def __init__(self, screenCapture: ScreenCapture, baseRoute =  "Mondongo/imgCandy/", umbral = 0.95):
+    def __init__(self, screenCapture, baseRoute =  "Mondongo/imgCandy/", umbral = 0.95):
         self.screenCapture = screenCapture
         self.colors = {
             0x01: (255, 255, 0),    #amarillo
@@ -54,7 +52,7 @@ class Convertion:
 
         return color_clasificado
 
-    def setScreenCapture(self, screenCapture: ScreenCapture):
+    def setScreenCapture(self, screenCapture):
         self.screenCapture = screenCapture
 
     def convert(self, division = 9):
@@ -105,34 +103,40 @@ class Convertion:
 
         return representationArray
     
-async def tarea1():
-    asyncio.create_subprocess_exec("make", "start")
-    await asyncio.sleep(5)
-    webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(5)
-    pointer = Pointer()
-    pointer.moveAndClick(750, 350)
-    await asyncio.sleep(30)
-    sc = ScreenCapture()
-    c = Convertion(sc, umbral=0.9)
-    array = c.convert()
-    print(array)
-    print(array.shape)
-    for i in array:
-        for j in i:
-            if j == 1:
-                print("Amarillo", end=" ")
-            elif j == 2:
-                print("Naranja", end=" ")
-            elif j == 3:
-                print("Azul", end=" ")
-            elif j == 4:
-                print("Verde", end=" ")
-            elif j == 5:
-                print("Morado", end=" ")
-            elif j == 6:
-                print("Rojo", end=" ")
-        print()
+
 
 if __name__ == "__main__":
+    from ScreenCapture import ScreenCapture
+    from Pointer import Pointer
+    import tracemalloc
+    tracemalloc.start()
+    async def tarea1():
+        await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
+        await asyncio.sleep(5)
+        webbrowser.open("http://127.0.0.1:3006")
+        await asyncio.sleep(5)
+        pointer = Pointer()
+        pointer.moveAndClick(750, 350)
+        await asyncio.sleep(30)
+        sc = ScreenCapture()
+        c = Convertion(sc, umbral=0.9)
+        array = c.convert()
+        print(array)
+        print(array.shape)
+        for i in array:
+            for j in i:
+                if j == 1:
+                    print("Amarillo", end=" ")
+                elif j == 2:
+                    print("Naranja", end=" ")
+                elif j == 3:
+                    print("Azul", end=" ")
+                elif j == 4:
+                    print("Verde", end=" ")
+                elif j == 5:
+                    print("Morado", end=" ")
+                elif j == 6:
+                    print("Rojo", end=" ")
+            print()
+
     asyncio.run(tarea1())
