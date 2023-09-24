@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # Clase de captura de pantalla
 class screenCapture:
-    def __init__(self, posx, posy, width, height):
+    def __init__(self, posx = 100, posy = 10, width = 650, height = 580):
         self.posx = posx
         self.posy = posy
         self.width = width
@@ -28,6 +28,13 @@ class screenCapture:
 
 # Test de class
 if __name__ == "__main__":
-    sc = screenCapture(0, 0, 800, 800)
+    #Posiciones absolutas candy
+    x = 100
+    y = 10
+    width = 650
+    height = 580
+    sc = screenCapture(x, 1080-768 + y, width, height)
+    sc2 = screenCapture()
     sc.showScreen()
+    sc2.showScreen()
 
