@@ -13,7 +13,7 @@ class Convertion:
         image = np.array(image)
 
         #Convertimos la imagen a un arreglo de 9x9
-        imageLength, imagewidth = image.shape
+        (imageLength, imagewidth, depth) = image.shape
         
         print(imageLength)
         
