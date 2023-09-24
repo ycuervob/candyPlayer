@@ -1,6 +1,6 @@
 # Agent
 
-Contiene los archivos del agente que soluciona el problema de forma conceptual, tiene estados y usa algún algoritmo como A* para encontrar la solucion a un problema con matrices.
+Contiene los archivos del agente que soluciona el problema de forma conceptual, tiene estados y usa algún algoritmo para encontrar la solucion a un problema con matrices.
 
 # Game
 
