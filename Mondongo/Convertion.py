@@ -35,7 +35,7 @@ class Convertion:
 
         for nombre_color, valor_color in self.colores.items():
             # Calcular la distancia euclidiana entre el pixel y el valor RGB del color
-            distancia = np.linalg.norm(np.array(pixel) - np.array(valor_color))
+            distancia = np.sqrt(abs(sum(np.power(np.array(pixel),2) - np.power(np.array(valor_color),2))))
             
             # Actualizar el color clasificado si la distancia actual es menor
             if distancia < distancia_minima:
