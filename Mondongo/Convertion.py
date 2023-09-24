@@ -35,7 +35,7 @@ class Convertion:
 
         for nombre_color, valor_color in self.colores.items():
             # Calcular la distancia euclidiana entre el pixel y el valor RGB del color
-            distancia = np.sqrt(abs(sum(np.power(np.array(pixel),2) - np.power(np.array(valor_color),2))))
+            distancia = np.sqrt(sum(np.power(np.array(pixel) - np.array(valor_color),2)))
             
             # Actualizar el color clasificado si la distancia actual es menor
             if distancia < distancia_minima:
@@ -72,7 +72,6 @@ class Convertion:
         for i in range(9):
             for j in range(9):
                 representationPixel = image[i * divisionLength + divisionLength // 2][j * divisionWidth + divisionWidth // 2]
-                print(self.clasificar_color(representationPixel))
                 for k in range(3):
                     representativeColor[i][j][k] += representationPixel[k]
             #Correccion de dulce por tapado 
