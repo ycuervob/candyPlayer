@@ -5,6 +5,7 @@ class Pointer:
     def __init__(self):
         self.x = 0
         self.y = 0
+        self.screenWidth, self.screenHeight = pyautogui.size()
         self.pos = (self.x, self.y)
         
     def move(self, x, y):
