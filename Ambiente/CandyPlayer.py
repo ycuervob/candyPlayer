@@ -36,7 +36,7 @@ async def play():
         #top 5 acciones en O(n + k log k)
         top_indices = np.argpartition(acciones[:, -1], -5)[-5:]
 
-        mejoresAcciones = 
+        mejoresAcciones = acciones[top_indices]
 
         #euristica
 
