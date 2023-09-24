@@ -109,7 +109,7 @@ async def tarea1():
     asyncio.create_subprocess_exec("make", "start")
     await asyncio.sleep(5)
     webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(3)
+    await asyncio.sleep(5)
     pointer = Pointer()
     pointer.moveAndClick(750, 350)
     await asyncio.sleep(30)
