@@ -37,7 +37,7 @@ class Convertion:
         #Creamos el arreglo de 9x9 que tendra la representación
         representationArray = np.zeros((division, division), dtype=np.int8)
         #Creamos un arreglo 9x9 que tendrá los colores de cada dulce en la matriz
-        representativeColor = np.ndarray(shape=(9,9,3), dtype=np.int8)
+        representativeColor = np.zeros((9,9,3), dtype=np.uint8)
 
         #Recorremos la imagen en los puntos medios de cada cuadro
         #Esta bien pero falta corregir un error de un candy que queda medio tapado por 
@@ -46,27 +46,30 @@ class Convertion:
             for j in range(9):
                 representationPixel = image[i * divisionLength + divisionLength // 2][j * divisionWidth + divisionWidth // 2]
                 print(representationPixel)
-                representativeColor = np.add(representativeColor, [representationPixel])
-                #mostrar_color_rgb(tuple(x/255 for x in representationPixel))
+                for k in range(3):
+                    representativeColor[i][j][k] += representationPixel[k]
             #Correccion de dulce por tapado 
-        print(representativeColor)
-        representativeColor[0][3] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-5] 
+        for k in range(3):
+            representativeColor[0][3][k] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k]
+
         return representativeColor
     
 async def tarea1():
-    # asyncio.create_subprocess_exec("make", "start")
-    # await asyncio.sleep(2)
-    # webbrowser.open("http://127.0.0.1:3006/")
-    # await asyncio.sleep(2)
-    # pointer = Pointer()
-    # pointer.moveAndClick(750, 350)
-    # await asyncio.sleep(30)
+    asyncio.create_subprocess_exec("make", "start")
+    await asyncio.sleep(2)
+    webbrowser.open("http://127.0.0.1:3006")
+    await asyncio.sleep(2)
+    pointer = Pointer()
+    pointer.moveAndClick(750, 350)
+    await asyncio.sleep(30)
     sc = ScreenCapture()
     c = Convertion(sc)
     array = c.convert()
     print(array)
     print(array.shape)
-    mostrar_color_rgb((0,1,0))
+    for i in range(9):
+        for j in range(9):
+            mostrar_color_rgb(tuple(x/255 for x in array[i][j]))
 
 if __name__ == "__main__":
     asyncio.run(tarea1())
