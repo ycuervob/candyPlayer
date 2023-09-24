@@ -4,6 +4,7 @@ import numpy as np
 import webbrowser
 import asyncio
 import matplotlib.pyplot as plt
+import cv2
 
 import matplotlib.pyplot as plt
 
@@ -21,13 +22,16 @@ def mostrar_color_rgb(color_rgb):
 class Convertion:
 
     colores = {
-    'amarillo': (255, 255, 0),
-    'naranja': (255, 150, 0),
-    'azul': (0, 0, 255),
-    'verde': (0, 255, 0),
-    'morado': (255, 0, 255),
-    'rojo': (255, 0, 0)
+    0x01: (255, 255, 0), #amarillo
+    0x02: (255, 150, 0), #naranja
+    0x03: (0, 0, 255), #azul
+    0x04: (0, 255, 0), #verde
+    0x05: (255, 0, 255), #morado
+    0x06: (255, 0, 0) #rojo
     }
+
+    def __init__(self, screenCapture: ScreenCapture):
+        self.screenCapture = screenCapture
 
     def clasificar_color(self, pixel):
         distancia_minima = float('inf')
@@ -45,9 +49,6 @@ class Convertion:
         return color_clasificado
 
     def setScreenCapture(self, screenCapture: ScreenCapture):
-        self.screenCapture = screenCapture
-    
-    def __init__(self, screenCapture: ScreenCapture):
         self.screenCapture = screenCapture
 
     def convert(self, division = 9):
