@@ -6,8 +6,6 @@ import asyncio
 import matplotlib.pyplot as plt
 import cv2
 
-import matplotlib.pyplot as plt
-
 def mostrar_color_rgb(color_rgb):
     fig, ax = plt.subplots()
     ax.add_patch(plt.Rectangle((0, 0), 1, 1, color=color_rgb))
@@ -21,19 +19,19 @@ def mostrar_color_rgb(color_rgb):
 #Clase que convierte la imagen al un arreglo de 9x9 de numpy
 class Convertion:
 
-    colores = {
-    0x01: (255, 255, 0), #amarillo
-    0x02: (255, 150, 0), #naranja
-    0x03: (0, 0, 255), #azul
-    0x04: (0, 255, 0), #verde
-    0x05: (255, 0, 255), #morado
-    0x06: (255, 0, 0) #rojo
-    }
-
     def __init__(self, screenCapture: ScreenCapture):
+        self.arraytipos = np.array(["", "E", "E1", "E2"])
         self.screenCapture = screenCapture
+        self.colores = {
+            0x01: (255, 255, 0),    #amarillo
+            0x02: (255, 150, 0),    #naranja
+            0x03: (0, 0, 255),      #azul
+            0x04: (0, 255, 0),      #verde
+            0x05: (255, 0, 255),    #morado
+            0x06: (255, 0, 0)       #rojo
+        }
 
-    def clasificar_color(self, pixel):
+    def clasificarColorBasic(self, pixel):
         distancia_minima = float('inf')
         color_clasificado = None
 
@@ -75,16 +73,21 @@ class Convertion:
                 representationPixel = image[i * divisionLength + divisionLength // 2][j * divisionWidth + divisionWidth // 2]
                 for k in range(3):
                     representativeColor[i][j][k] += representationPixel[k]
-            #Correccion de dulce por tapado 
+        #Correccion de dulce por tapado 
         for k in range(3):
             representativeColor[0][3][k] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k]
 
+        #Clasificamos los colores
+        for i in range(9):
+            for j in range(9):
+                representationArray[i][j] = self.clasificarColorBasic(representativeColor[i][j])
+    
         
-        return representativeColor
+        return representationArray
     
 async def tarea1():
     asyncio.create_subprocess_exec("make", "start")
-    await asyncio.sleep(2)
+    await asyncio.sleep(5)
     webbrowser.open("http://127.0.0.1:3006")
     await asyncio.sleep(2)
     pointer = Pointer()

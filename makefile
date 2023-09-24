@@ -24,7 +24,7 @@ install-http-server:
 	sudo $(NPM) -g install http-server
 
 start:
-	@read -p "Presione [Y] para instalar http-server: " REPLY && if [ "$$REPLY" = "y" ] || [ "$$REPLY" = "Y" ]; then make install-http-server; fi
+#@read -p "Presione [Y] para instalar http-server: " REPLY && if [ "$$REPLY" = "y" ] || [ "$$REPLY" = "Y" ]; then make install-http-server; fi
 	@echo "Iniciando http-server en el puerto $(PORT)..."
 	$(HTTP_SERVER) $(GAME_DIR) -p $(PORT)
 
