@@ -19,6 +19,33 @@ def mostrar_color_rgb(color_rgb):
 
 #Clase que convierte la imagen al un arreglo de 9x9 de numpy
 class Convertion:
+
+    colores = {
+    'amarillo': (255, 255, 0),
+    'naranja': (255, 150, 0),
+    'azul': (0, 0, 255),
+    'verde': (0, 255, 0),
+    'morado': (255, 0, 255),
+    'rojo': (255, 0, 0)
+    }
+
+    def clasificar_color(self, pixel):
+        distancia_minima = float('inf')
+        color_clasificado = None
+
+        for nombre_color, valor_color in self.colores.items():
+            # Calcular la distancia euclidiana entre el pixel y el valor RGB del color
+            distancia = np.linalg.norm(np.array(pixel) - np.array(valor_color))
+            
+            # Actualizar el color clasificado si la distancia actual es menor
+            if distancia < distancia_minima:
+                distancia_minima = distancia
+                color_clasificado = nombre_color
+
+        return color_clasificado
+
+    def setScreenCapture(self, screenCapture: ScreenCapture):
+        self.screenCapture = screenCapture
     
     def __init__(self, screenCapture: ScreenCapture):
         self.screenCapture = screenCapture
@@ -45,13 +72,14 @@ class Convertion:
         for i in range(9):
             for j in range(9):
                 representationPixel = image[i * divisionLength + divisionLength // 2][j * divisionWidth + divisionWidth // 2]
-                print(representationPixel)
+                print(self.clasificar_color(representationPixel))
                 for k in range(3):
                     representativeColor[i][j][k] += representationPixel[k]
             #Correccion de dulce por tapado 
         for k in range(3):
             representativeColor[0][3][k] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k]
 
+        
         return representativeColor
     
 async def tarea1():
@@ -67,9 +95,9 @@ async def tarea1():
     array = c.convert()
     print(array)
     print(array.shape)
-    for i in range(9):
-        for j in range(9):
-            mostrar_color_rgb(tuple(x/255 for x in array[i][j]))
+    # for i in range(9):
+    #     for j in range(9):
+    #         mostrar_color_rgb(tuple(x/255 for x in array[i][j]))
 
 if __name__ == "__main__":
     asyncio.run(tarea1())
