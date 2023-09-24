@@ -20,6 +20,25 @@
 </head>
 
 <body>
+    <script>
+        function activarFullScreen() {
+            var contentElement = document.documentElement;
+
+            if (contentElement.requestFullscreen) {
+                contentElement.requestFullscreen(); 
+            } else if (contentElement.mozRequestFullScreen) {
+                contentElement.mozRequestFullScreen();
+            } else if (contentElement.webkitRequestFullscreen) {
+                contentElement.webkitRequestFullscreen();
+            } else if (contentElement.msRequestFullscreen) {
+                contentElement.msRequestFullscreen(); 
+            }
+            
+            document.removeEventListener('click', activarFullScreen);
+        }
+
+        document.addEventListener('click', activarFullScreen);
+    </script>
     <div id='ruffle'></div>
     <script src='ruffle/ruffle.js'></script>
     <script>
