@@ -12,6 +12,10 @@ class Pointer:
         self.y = y
         self.pos = (self.x, self.y)
         pyautogui.moveTo(self.pos)
+
+    def moveAndClick(self, x, y):
+        self.move(x, y)
+        self.click()
         
     def click(self):
         pyautogui.click(self.pos)
