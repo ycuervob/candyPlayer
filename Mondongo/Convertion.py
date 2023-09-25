@@ -76,7 +76,7 @@ class Convertion:
         #Un letrero
         for i in range(9):
             for j in range(9):
-                representationPixel = image[i * divisionLength + divisionLength // 2][j * divisionWidth + divisionWidth // 2]
+                representationPixel = image[3 + i * divisionLength + divisionLength // 2][3 + j * divisionWidth + divisionWidth // 2]
                 for k in range(3):
                     representativeColor[i][j][k] += representationPixel[k]
         #Correccion de dulce por tapado 
