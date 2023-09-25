@@ -28,6 +28,7 @@ class Agent:
                 caso4H, _ = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH1[j+2]) #Caso 4
                 caso5H, _ = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH1[j+2]) #Caso 5
                 caso6H, _ = self.sameCandy(vectorH1[j], vectorH1[j+1], vectorH[j+2]) #Caso 6
+                caso7H, _ = self.sameCandy(vectorH[j], vectorH1[j]) #Caso 7 y 8
 
                 if caso1H:
                     movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
@@ -41,6 +42,13 @@ class Agent:
                     movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
                 if caso6H:
                     movements.append(((i-1,j+2), (i,j+2), self.matrixValue(matrixCandy, (i-1,j+2), (i,j+2))[0]))
+                if caso7H:
+                    if (i+2) < length:
+                        if self.sameCandy(vectorH[i], matrixCandy[i+2][j])[0]:
+                            movements.append(((i+1,j), (i+2,j), self.matrixValue(matrixCandy, (i+1,j), (i+2,j))[0]))
+                    if (i-3) >= 0:
+                        if self.sameCandy(vectorH[i], matrixCandy[i-3][j])[0]:
+                            movements.append(((i-2,j), (i-3,j), self.matrixValue(matrixCandy, (i-2,j), (i-3,j))[0]))
 
                 caso1V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
                 caso2V, _ = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV[j+2]) #Caso 2
@@ -48,6 +56,7 @@ class Agent:
                 caso4V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV1[j+2]) #Caso 4
                 caso5V, _ = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV1[j+2]) #Caso 5
                 caso6V, _ = self.sameCandy(vectorV1[j], vectorV1[j+1], vectorV[j+2]) #Caso 6
+                caso7V, _ = self.sameCandy(vectorV[j], vectorV1[j]) #Caso 7 y 8
 
                 if caso1V:
                     movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
@@ -61,6 +70,13 @@ class Agent:
                     movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
                 if caso6V:
                     movements.append(((j+2,i-1), (j+2,i), self.matrixValue(matrixCandy, (j+2,i-1), (j+2,i))[0]))
+                if caso7V:
+                    if (i+2) < length:
+                        if self.sameCandy(vectorV[i], matrixCandy[j][i+2])[0]:
+                            movements.append(((j,i+1), (j,i+2), self.matrixValue(matrixCandy, (j,i+1), (j,i+2))[0]))
+                    if (i-3) >= 0:
+                        if self.sameCandy(vectorV[i], matrixCandy[j][i-3])[0]:
+                            movements.append(((j,i-2), (j,i-3), self.matrixValue(matrixCandy, (j,i-2), (j,i-3))[0]))
 
         return movements
         

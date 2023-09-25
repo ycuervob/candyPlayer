@@ -28,7 +28,6 @@ async def play():
     i = 0
     while i < 1000:
         #conseguir acciones desde la pantalla
-        await asyncio.sleep(0.09)
         matriz = c.convert()
         print(matriz)
         acciones = a.actions(matriz)
@@ -48,17 +47,11 @@ async def play():
         mejoresAcciones = acciones[top_indices]
 
         #euristica
-
-        #TODO paralelizarlo
-        agentes = [Agent(np.array([], dtype=np.int8)) for x in range(num_agentes)]
-
-        matrices = [agentes[i].matrixValue(matriz,mejoresAcciones[i][0],mejoresAcciones[i][1])[1] for i in range(len(agentes))]
-
-        euristica = [agentes[i].compute("s",matrices[i])[2] for i in range(len(agentes))]
+        matrices = [a.matrixValue(matriz,mejoresAcciones[i][0],mejoresAcciones[i][1])[1] for i in range(num_agentes)]
+        euristica = [a.compute("s",matrices[i])[2] for i in range(num_agentes)]
         
         # mejor movimiento de acuerdo a la euristica
-        arr1 = np.array([mejoresAcciones[i][2] for i in range(len(agentes))])
-
+        arr1 = np.array([mejoresAcciones[i][2] for i in range(num_agentes)])
         arr2 = np.array(euristica)
         resultado = arr1 + arr2
 

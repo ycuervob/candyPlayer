@@ -25,9 +25,6 @@ class ScreenCapture:
     def getScreen(self):
         return self.screen
 
-    def saveScreen(self, filename):
-        self.screen.save(filename)
-
 # Test de class
 if __name__ == "__main__":
     #Posiciones absolutas candy

@@ -21,7 +21,7 @@ class Convertion:
         self.screenCapture = screenCapture
         self.colors = {
             0x01: (255, 255, 0),    #amarillo
-            0x02: (255, 140, 0),    #naranja
+            0x02: (255, 150, 0),    #naranja
             0x03: (0, 0, 255),      #azul
             0x04: (0, 255, 0),      #verde
             0x05: (255, 0, 255),    #morado
