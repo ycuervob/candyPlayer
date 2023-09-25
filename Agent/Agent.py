@@ -22,10 +22,10 @@ class Agent:
             vectorV = matrixCandy[:,i-1]
             vectorV1 = matrixCandy[:,i]
             for j in range(length-2):
-                caso1H, isprime = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH[j+2]) #Caso 1
-                caso2H, isprime = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH[j+2]) #Caso 2
-                caso3H, isprime = self.sameCandy(vectorH[j], vectorH[j+1], vectorH1[j+2]) #Caso 3
-                caso4H, isprime = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH1[j+2]) #Caso 4
+                caso1H, _ = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH[j+2]) #Caso 1
+                caso2H, _ = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH[j+2]) #Caso 2
+                caso3H, _ = self.sameCandy(vectorH[j], vectorH[j+1], vectorH1[j+2]) #Caso 3
+                caso4H, _ = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH1[j+2]) #Caso 4
 
                 if caso1H:
                     movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
@@ -36,10 +36,10 @@ class Agent:
                 if caso4H:
                     movements.append(((i-1,j+1), (i,j+1), self.matrixValue(matrixCandy, (i-1,j+1), (i,j+1))[0]))
 
-                caso1V, isprime = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
-                caso2V, isprime = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV[j+2]) #Caso 2
-                caso3V, isprime = self.sameCandy(vectorV[j], vectorV[j+1], vectorV1[j+2]) #Caso 3
-                caso4V, isprime = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV1[j+2]) #Caso 4
+                caso1V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
+                caso2V, _ = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV[j+2]) #Caso 2
+                caso3V, _ = self.sameCandy(vectorV[j], vectorV[j+1], vectorV1[j+2]) #Caso 3
+                caso4V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV1[j+2]) #Caso 4
 
                 if caso1V:
                     movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
