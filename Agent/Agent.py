@@ -75,7 +75,6 @@ class Agent:
                         if self.sameCandy(vectorV[j], matrixCandy[j][i+2])[0]:
                             movements.append(((j,i+1), (j,i+2), self.matrixValue(matrixCandy, (j,i+1), (j,i+2))[0]))
                     if (i-3) >= 0:
-                        print("caso7V")
                         if self.sameCandy(vectorV[j], matrixCandy[j][i-3])[0]:
                             movements.append(((j,i-2), (j,i-3), self.matrixValue(matrixCandy, (j,i-2), (j,i-3))[0]))
 
@@ -194,6 +193,17 @@ if(__name__ == "__main__"):
     matrix_ejemplo[5][1] = 0x01
     matrix_ejemplo[2][1] = 0x01
     matrix_ejemplo[3][1] = 0x01
+
+    matrix_ejemplo += [
+    [3, 6, 5, 5, 3, 5, 6, 1, 1],
+    [1, 6, 3, 6, 5, 1, 3, 5, 4],
+    [2, 4, 1, 2, 4, 1, 5, 6, 3],
+    [6, 1, 4, 3, 5, 3, 4, 6, 3],
+    [5, 5, 3, 1, 6, 1, 3, 2, 4],
+    [3, 1, 3, 5, 2, 2, 6, 6, 1],
+    [3, 5, 6, 5, 1, 3, 6, 2, 4],
+    [4, 6, 5, 2, 1, 5, 1, 5, 5],
+    [4, 6, 5, 1, 6, 3, 1, 3, 6]]
 
     print(matrix_ejemplo)
     print(agenteTest.actions(matrix_ejemplo))
