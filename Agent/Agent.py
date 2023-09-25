@@ -44,10 +44,10 @@ class Agent:
                     movements.append(((i-1,j+2), (i,j+2), self.matrixValue(matrixCandy, (i-1,j+2), (i,j+2))[0]))
                 if caso7H:
                     if (i+2) < length:
-                        if self.sameCandy(vectorH[i], matrixCandy[i+2][j])[0]:
+                        if self.sameCandy(vectorH[j], matrixCandy[i+2][j])[0]:
                             movements.append(((i+1,j), (i+2,j), self.matrixValue(matrixCandy, (i+1,j), (i+2,j))[0]))
                     if (i-3) >= 0:
-                        if self.sameCandy(vectorH[i], matrixCandy[i-3][j])[0]:
+                        if self.sameCandy(vectorH[j], matrixCandy[i-3][j])[0]:
                             movements.append(((i-2,j), (i-3,j), self.matrixValue(matrixCandy, (i-2,j), (i-3,j))[0]))
 
                 caso1V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
@@ -72,10 +72,11 @@ class Agent:
                     movements.append(((j+2,i-1), (j+2,i), self.matrixValue(matrixCandy, (j+2,i-1), (j+2,i))[0]))
                 if caso7V:
                     if (i+2) < length:
-                        if self.sameCandy(vectorV[i], matrixCandy[j][i+2])[0]:
+                        if self.sameCandy(vectorV[j], matrixCandy[j][i+2])[0]:
                             movements.append(((j,i+1), (j,i+2), self.matrixValue(matrixCandy, (j,i+1), (j,i+2))[0]))
                     if (i-3) >= 0:
-                        if self.sameCandy(vectorV[i], matrixCandy[j][i-3])[0]:
+                        print("caso7V")
+                        if self.sameCandy(vectorV[j], matrixCandy[j][i-3])[0]:
                             movements.append(((j,i-2), (j,i-3), self.matrixValue(matrixCandy, (j,i-2), (j,i-3))[0]))
 
         return movements
@@ -136,6 +137,10 @@ class Agent:
         return value, matrixCandy
     
     def sameCandy(self,*candies : np.int8):
+
+        if 0x00 in candies:
+            return False, False
+
         same = True
         primeCandy = False
         for candy in candies:
@@ -185,43 +190,11 @@ class Agent:
 if(__name__ == "__main__"):
     agenteTest = Agent(np.array([], dtype=np.int8)) # Esto es solo un ejemplo esta no es la matriz real
     # Ejemplo de matrix de 9x9 con una secuencia de 5 consecutivas
-    matrix_ejemplo = np.array([
-        [1, 12, 1, 2, 2, 2, 2, 2, 2],
-        [4, 3, 4, 5, 1, 5, 4, 5, 5],
-        [2, 2, 2, 6, 4, 8, 4, 6, 6],
-        [1, 3, 3, 4, 5, 6, 2, 6, 5],
-        [5, 6, 2, 6, 5, 4, 3, 2, 1],
-        [1, 2, 1, 2, 1, 2, 3, 5, 3],
-        [4, 5, 4, 5, 1, 5, 6, 2, 6],
-        [2, 6, 2, 6, 2, 6, 5, 6, 5],
-        [1, 2, 3, 4, 5, 6, 2, 6, 5]
-    ], dtype=np.int8)
+    matrix_ejemplo = np.zeros((9,9), dtype=np.int8)
+    matrix_ejemplo[5][1] = 0x01
+    matrix_ejemplo[2][1] = 0x01
+    matrix_ejemplo[3][1] = 0x01
 
     print(matrix_ejemplo)
-    ncandy, newMatrix  = agenteTest.matrixValue(matrix_ejemplo, (0,0), (0,0))
-    print("Candy:", ncandy)
-    print(newMatrix)
+    print(agenteTest.actions(matrix_ejemplo))
 
-    print("Actions:")
-
-    matrix_ejemplo2 = np.array([
-        [1,12, 1, 2, 4, 2, 6, 2, 2],
-        [4, 2, 4, 5, 1, 5, 4, 5, 5],
-        [2, 1, 2, 6, 1, 8, 4, 6, 6],
-        [1, 3, 3, 4, 5, 6, 2, 6, 5],
-        [5, 6, 2, 6, 5, 4, 3, 2, 1],
-        [1, 2, 1, 2, 1, 5, 3, 5, 3],
-        [4, 5, 4, 5, 1, 5, 6, 2, 6],
-        [2, 6, 2, 6, 2, 6, 5, 6, 5],
-        [1, 2, 3, 4, 5, 6, 2, 6, 5]
-    ], dtype=np.int8)
-
-    print(matrix_ejemplo2)
-    actions = agenteTest.actions(matrix_ejemplo2)
-    print("Actions: ->")
-    print(actions)
-
-    print("Solution: ")
-    print(agenteTest.compute("s", matrix_ejemplo2))
-
-    print("Solution:", agenteTest)
