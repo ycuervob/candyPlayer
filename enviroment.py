@@ -26,16 +26,22 @@ async def play():
     c,a,p,sc = await init()
 
     i = 0
-    while i < 20:
+    while i < 1000:
         #conseguir acciones desde la pantalla
         matriz = c.convert()
         acciones = a.actions(matriz)
         acciones = np.array(acciones, dtype=object)
+        
+        #si no hay acciones  se vuelve a probar a calcular las acciones
+        if len(acciones) == 0:
+            sc.setScreen()
+            continue
 
         num_agentes = min(len(acciones), 5)
 
         #top 5 acciones en O(n + k log k)
-        top_indices = np.argpartition(acciones[:, -1], -5)[-num_agentes:]
+        print(num_agentes)
+        top_indices = np.argpartition(acciones[:, -1], -num_agentes)[-5:]
 
         mejoresAcciones = acciones[top_indices]
 

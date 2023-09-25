@@ -146,7 +146,9 @@ class Agent:
             return self.matrixValue(matrixCandy, punto1, punto2)
         elif(perception == "s"):
             actions = self.actions(matrixCandy)
-            return max(actions, key=lambda x: x[2])
+            if len(actions) > 0:
+                return max(actions, key=lambda x: x[2])
+            return ((0,0), (0,0), 0)
         else:
             return None
 
