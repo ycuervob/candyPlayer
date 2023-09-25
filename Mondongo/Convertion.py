@@ -28,14 +28,14 @@ class Convertion:
             0x06: (255, 0, 0)       #rojo
         }
         self.umbral = umbral
-        self.arraytypes = np.array(["", "E", "E1", "E2"])
-        self.arrayAmarillos = [cv2.cvtColor(cv2.imread(baseRoute + "amarillo/amarillo"+ types +".png") , cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayNaranjas = [cv2.cvtColor(cv2.imread(baseRoute + "naranja/naranja"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayAzules = [cv2.cvtColor(cv2.imread(baseRoute + "azul/azul"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayVerdes = [cv2.cvtColor(cv2.imread(baseRoute + "verde/verde"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayMorados = [cv2.cvtColor(cv2.imread(baseRoute + "morado/morado"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayRojos = [cv2.cvtColor(cv2.imread(baseRoute + "rojo/rojo"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
-        self.arrayCandy = [self.arrayAmarillos, self.arrayNaranjas, self.arrayAzules, self.arrayVerdes, self.arrayMorados, self.arrayRojos]
+        # self.arraytypes = np.array(["", "E", "E1", "E2"])
+        # self.arrayAmarillos = [cv2.cvtColor(cv2.imread(baseRoute + "amarillo/amarillo"+ types +".png") , cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayNaranjas = [cv2.cvtColor(cv2.imread(baseRoute + "naranja/naranja"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayAzules = [cv2.cvtColor(cv2.imread(baseRoute + "azul/azul"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayVerdes = [cv2.cvtColor(cv2.imread(baseRoute + "verde/verde"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayMorados = [cv2.cvtColor(cv2.imread(baseRoute + "morado/morado"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayRojos = [cv2.cvtColor(cv2.imread(baseRoute + "rojo/rojo"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
+        # self.arrayCandy = [self.arrayAmarillos, self.arrayNaranjas, self.arrayAzules, self.arrayVerdes, self.arrayMorados, self.arrayRojos]
 
     def clasificarColorBasic(self, pixel):
         distancia_minima = float('inf')
@@ -57,9 +57,9 @@ class Convertion:
 
     def convert(self, division = 9):
         #Obtenemos la imagen
-        image = self.screenCapture.getScreen()
+        completeImage = self.screenCapture.getScreen()
         #Convertimos la imagen a un arreglo de numpy
-        image = np.array(image)
+        image = np.array(completeImage)
 
         #Convertimos la imagen a un arreglo de 9x9
         (imageLength, imagewidth, depth) = image.shape
@@ -80,26 +80,25 @@ class Convertion:
                 for k in range(3):
                     representativeColor[i][j][k] += representationPixel[k]
         #Correccion de dulce por tapado 
-        for k in range(3):
-            representativeColor[0][3][k] = image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k]
+        representativeColor[0][3]+= [image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k] for k in range(3)]
 
         #Clasificamos los colores basicamente
         for i in range(9):
             for j in range(9):
                 representationArray[i][j] = self.clasificarColorBasic(representativeColor[i][j])
 
-        #Clasificamos los colores de los dulces mas especificamente usando openCV
-        for i in range(9):
-            for j in range(9):
-                candysOfSameColor = self.arrayCandy[representationArray[i][j]-1]
-                for i in range(len(candysOfSameColor)):
-                    candy = candysOfSameColor[i]
-                    histCandy = cv2.calcHist([candy], [0], None, [256], [0, 256])
-                    histImage = cv2.calcHist([image[i * divisionLength: (i + 1) * divisionLength, j * divisionWidth: (j + 1) * divisionWidth]], [0], None, [256], [0, 256])
-                    simliarity = cv2.compareHist(histCandy, histImage, cv2.HISTCMP_CORREL)
-                    if abs(simliarity) > self.umbral and i > 0:
-                        representationArray[i][j] += 9
-                        break
+        # #Clasificamos los colores de los dulces mas especificamente usando openCV
+        # for i in range(9):
+        #     for j in range(9):
+        #         candysOfSameColor = self.arrayCandy[representationArray[i][j]-1] 
+        #         histImage = cv2.calcHist([image[i * divisionLength: (i + 1) * divisionLength, j * divisionWidth: (j + 1) * divisionWidth]], [0], None, [256], [0, 256])
+        #         for k in range(len(candysOfSameColor)): 
+        #             candy = candysOfSameColor[k]
+        #             histCandy = cv2.calcHist([candy], [0], None, [256], [0, 256])
+        #             simliarity = cv2.compareHist(histCandy, histImage, cv2.HISTCMP_CORREL)
+        #             if abs(simliarity) > self.umbral and i > 0:
+        #                 representationArray[i][j] += 9
+        #                 break
                     
 
         return representationArray
