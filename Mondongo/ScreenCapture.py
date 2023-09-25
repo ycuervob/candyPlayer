@@ -11,6 +11,9 @@ class ScreenCapture:
         self.height = height
         self.screen = pyautogui.screenshot(region=(self.posx, self.posy, self.width, self.height))
 
+    def setScreen(self):
+        self.screen = pyautogui.screenshot(region=(self.posx, self.posy, self.width, self.height))
+
     def showScreen(self):
         # Convierte la captura de pantalla a un arreglo NumPy
         screenshot_np = np.array(self.screen)

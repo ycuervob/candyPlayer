@@ -9,25 +9,24 @@ import asyncio
 import numpy as np
 
 async def init():
-    asyncio.create_subprocess_exec("make", "start")
-    await asyncio.sleep(5)
+    await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
     webbrowser.open("http://127.0.0.1:3006")
     await asyncio.sleep(5)
     pointer = Pointer()
     pointer.moveAndClick(750, 350)
-    await asyncio.sleep(30)
+    await asyncio.sleep(25)
     sc = ScreenCapture()
     c = Convertion(sc, umbral=0.9)
     a = Agent(np.array([], dtype=np.int8))
     p = Player(pointer)
 
-    return c,a,p
+    return c,a,p, sc
 
 async def play():
-    c,a,p = await init()
+    c,a,p,sc = await init()
 
     i = 0
-    while i < 2:
+    while i < 20:
         #conseguir acciones desde la pantalla
         matriz = c.convert()
         acciones = a.actions(matriz)
@@ -75,8 +74,10 @@ async def play():
 
         mejorMovimiento = np.argmax(resultado)
         print("mejorMovimiento:", mejoresAcciones[mejorMovimiento])
-        await p.movimiento(mejoresAcciones[mejorMovimiento])
+        p.movimiento(mejoresAcciones[mejorMovimiento])
         i+=1
+
+        sc.setScreen()
 
 async def main():
     await play()
