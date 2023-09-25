@@ -11,12 +11,12 @@ import numpy as np
 async def init():
     await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
     webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(5)
+    await asyncio.sleep(2)
     pointer = Pointer()
     pointer.moveAndClick(750, 350)
     await asyncio.sleep(25)
     sc = ScreenCapture()
-    c = Convertion(sc, umbral=0.9)
+    c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
     p = Player(pointer)
 
@@ -28,7 +28,9 @@ async def play():
     i = 0
     while i < 1000:
         #conseguir acciones desde la pantalla
+        await asyncio.sleep(0.09)
         matriz = c.convert()
+        print(matriz)
         acciones = a.actions(matriz)
         acciones = np.array(acciones, dtype=object)
         

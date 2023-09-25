@@ -21,7 +21,7 @@ class Convertion:
         self.screenCapture = screenCapture
         self.colors = {
             0x01: (255, 255, 0),    #amarillo
-            0x02: (255, 150, 0),    #naranja
+            0x02: (255, 140, 0),    #naranja
             0x03: (0, 0, 255),      #azul
             0x04: (0, 255, 0),      #verde
             0x05: (255, 0, 255),    #morado
@@ -92,11 +92,12 @@ class Convertion:
         for i in range(9):
             for j in range(9):
                 candysOfSameColor = self.arrayCandy[representationArray[i][j]-1]
-                for candy in candysOfSameColor:
+                for i in range(len(candysOfSameColor)):
+                    candy = candysOfSameColor[i]
                     histCandy = cv2.calcHist([candy], [0], None, [256], [0, 256])
                     histImage = cv2.calcHist([image[i * divisionLength: (i + 1) * divisionLength, j * divisionWidth: (j + 1) * divisionWidth]], [0], None, [256], [0, 256])
                     simliarity = cv2.compareHist(histCandy, histImage, cv2.HISTCMP_CORREL)
-                    if simliarity > self.umbral and candysOfSameColor.index(candy) > 0:
+                    if abs(simliarity) > self.umbral and i > 0:
                         representationArray[i][j] += 9
                         break
                     

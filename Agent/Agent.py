@@ -26,6 +26,8 @@ class Agent:
                 caso2H, _ = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH[j+2]) #Caso 2
                 caso3H, _ = self.sameCandy(vectorH[j], vectorH[j+1], vectorH1[j+2]) #Caso 3
                 caso4H, _ = self.sameCandy(vectorH1[j], vectorH[j+1], vectorH1[j+2]) #Caso 4
+                caso5H, _ = self.sameCandy(vectorH[j], vectorH1[j+1], vectorH1[j+2]) #Caso 5
+                caso6H, _ = self.sameCandy(vectorH1[j], vectorH1[j+1], vectorH[j+2]) #Caso 6
 
                 if caso1H:
                     movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
@@ -35,11 +37,17 @@ class Agent:
                     movements.append(((i-1,j+2), (i,j+2), self.matrixValue(matrixCandy, (i-1,j+2), (i,j+2))[0]))
                 if caso4H:
                     movements.append(((i-1,j+1), (i,j+1), self.matrixValue(matrixCandy, (i-1,j+1), (i,j+1))[0]))
+                if caso5H:
+                    movements.append(((i-1,j), (i,j), self.matrixValue(matrixCandy, (i-1,j), (i,j))[0]))
+                if caso6H:
+                    movements.append(((i-1,j+2), (i,j+2), self.matrixValue(matrixCandy, (i-1,j+2), (i,j+2))[0]))
 
                 caso1V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV[j+2]) #Caso 1
                 caso2V, _ = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV[j+2]) #Caso 2
                 caso3V, _ = self.sameCandy(vectorV[j], vectorV[j+1], vectorV1[j+2]) #Caso 3
                 caso4V, _ = self.sameCandy(vectorV1[j], vectorV[j+1], vectorV1[j+2]) #Caso 4
+                caso5V, _ = self.sameCandy(vectorV[j], vectorV1[j+1], vectorV1[j+2]) #Caso 5
+                caso6V, _ = self.sameCandy(vectorV1[j], vectorV1[j+1], vectorV[j+2]) #Caso 6
 
                 if caso1V:
                     movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
@@ -49,7 +57,11 @@ class Agent:
                     movements.append(((j+2,i-1), (j+2,i), self.matrixValue(matrixCandy, (j+2,i-1), (j+2,i))[0]))
                 if caso4V:
                     movements.append(((j+1,i-1), (j+1,i), self.matrixValue(matrixCandy, (j+1,i-1), (j+1,i))[0]))
-                
+                if caso5V:
+                    movements.append(((j,i-1), (j,i), self.matrixValue(matrixCandy, (j,i-1), (j,i))[0]))
+                if caso6V:
+                    movements.append(((j+2,i-1), (j+2,i), self.matrixValue(matrixCandy, (j+2,i-1), (j+2,i))[0]))
+
         return movements
         
     # Esta función recibe una matriz de dulces
