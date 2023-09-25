@@ -1,4 +1,4 @@
-from Agent import Agent
+from Agent.Agent import Agent
 from Mondongo.Convertion import Convertion
 from Mondongo.Player import Player
 from Mondongo.Pointer import Pointer
@@ -13,13 +13,13 @@ a = None
 p = None
 
 async def init():
-    asyncio.create_subprocess_exec("make", "start")
-    await asyncio.sleep(5)
+    global c, a, p
+    await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
     webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(5)
+    await asyncio.sleep(2)
     pointer = Pointer()
     pointer.moveAndClick(750, 350)
-    await asyncio.sleep(30)
+    await asyncio.sleep(26)
     sc = ScreenCapture()
     c = Convertion(sc, umbral=0.9)
     a = Agent(np.array([], dtype=np.int8))
@@ -27,10 +27,12 @@ async def init():
 
 async def play():
     await init()
+    global c, a, p
 
     while True:
         #conseguir acciones desde la pantalla
         acciones = a.actions(c.convert())
+        print(acciones)
 
         #top 5 acciones en O(n + k log k)
         top_indices = np.argpartition(acciones[:, -1], -5)[-5:]
@@ -69,3 +71,5 @@ async def play():
         mejorMovimiento = np.argmax(resultado)
 
         p.movimiento(mejoresAcciones[mejorMovimiento])
+
+asyncio.run(play())
