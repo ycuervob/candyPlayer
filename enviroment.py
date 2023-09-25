@@ -56,9 +56,8 @@ async def play():
         resultado = arr1 + arr2
 
         mejorMovimiento = np.argmax(resultado)
-        ranint = np.random.randint(0, len(mejoresAcciones)-1)
-        print("mejorMovimiento:", mejoresAcciones[ranint])
-        p.movimiento(mejoresAcciones[ranint])
+        print("mejorMovimiento:", mejoresAcciones[mejorMovimiento])
+        p.movimiento(mejoresAcciones[mejorMovimiento])
         i+=1
 
         sc.setScreen()
