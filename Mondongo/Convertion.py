@@ -2,7 +2,6 @@ import numpy as np
 import webbrowser
 import asyncio
 import matplotlib.pyplot as plt
-import cv2
 
 def mostrar_color_rgb(color_rgb):
     fig, ax = plt.subplots()
@@ -37,7 +36,23 @@ class Convertion:
         # self.arrayRojos = [cv2.cvtColor(cv2.imread(baseRoute + "rojo/rojo"+ types +".png"), cv2.COLOR_BGR2GRAY) for types in self.arraytypes]
         # self.arrayCandy = [self.arrayAmarillos, self.arrayNaranjas, self.arrayAzules, self.arrayVerdes, self.arrayMorados, self.arrayRojos]
 
-    def clasificarColorBasic(self, pixel):
+
+    def clasificarColorBasic(self, pixels):
+        #Creamos un arreglo para obtener los 10x10 tipos de colores de pixeles
+        representationPixels = np.zeros((10,10), dtype=np.int8)
+        #Obtenemos el color de cada pixel con la distancia mas corta a los colores
+
+        for i in range(10):
+            for j in range(10):
+                representationPixels[i][j] += self.clasifyOnePixel(pixels[i][j])
+
+        #Obtenemos el color que mas se repite
+        (unique, counts) = np.unique(representationPixels, return_counts=True)
+        index = np.argmax(counts)
+
+        return unique[index]
+
+    def clasifyOnePixel(self, pixel):
         distancia_minima = float('inf')
         color_clasificado = None
 
@@ -68,38 +83,21 @@ class Convertion:
         divisionWidth = imagewidth // division
         #Creamos el arreglo de 9x9 que tendra la representación
         representationArray = np.zeros((division, division), dtype=np.int8)
-        #Creamos un arreglo 9x9 que tendrá los colors de cada dulce en la matriz
-        representativeColor = np.zeros((9,9,3), dtype=np.uint8)
 
         #Recorremos la imagen en los puntos medios de cada cuadro
         #Esta bien pero falta corregir un error de un candy que queda medio tapado por 
         #Un letrero
         for i in range(9):
             for j in range(9):
-                representationPixel = image[3 + i * divisionLength + divisionLength // 2][3 + j * divisionWidth + divisionWidth // 2]
-                for k in range(3):
-                    representativeColor[i][j][k] += representationPixel[k]
+                middlePointX = j * divisionWidth + (divisionWidth // 2)
+                middlePointY = i * divisionLength + (divisionLength // 2)
+                representationPixels = image[middlePointY-5:middlePointY+5, middlePointX-5:middlePointX+5]
+                representationArray[i][j] +=  self.clasificarColorBasic(representationPixels)
+
         #Correccion de dulce por tapado 
-        representativeColor[0][3]+= [image[divisionLength // 2][(3 * divisionWidth + divisionWidth // 2)-10][k] for k in range(3)]
-
-        #Clasificamos los colores basicamente
-        for i in range(9):
-            for j in range(9):
-                representationArray[i][j] = self.clasificarColorBasic(representativeColor[i][j])
-
-        # #Clasificamos los colores de los dulces mas especificamente usando openCV
-        # for i in range(9):
-        #     for j in range(9):
-        #         candysOfSameColor = self.arrayCandy[representationArray[i][j]-1] 
-        #         histImage = cv2.calcHist([image[i * divisionLength: (i + 1) * divisionLength, j * divisionWidth: (j + 1) * divisionWidth]], [0], None, [256], [0, 256])
-        #         for k in range(len(candysOfSameColor)): 
-        #             candy = candysOfSameColor[k]
-        #             histCandy = cv2.calcHist([candy], [0], None, [256], [0, 256])
-        #             simliarity = cv2.compareHist(histCandy, histImage, cv2.HISTCMP_CORREL)
-        #             if abs(simliarity) > self.umbral and i > 0:
-        #                 representationArray[i][j] += 9
-        #                 break
-                    
+        middlePoinBloquedCandyX = divisionLength // 2
+        middlePoinBloquedCandyY = (3 * divisionWidth + divisionWidth // 2)-15
+        representationArray[0][3]+= self.clasificarColorBasic(image[middlePoinBloquedCandyY-5:middlePoinBloquedCandyY+5, middlePoinBloquedCandyX-5:middlePoinBloquedCandyX+5])            
 
         return representationArray
     
