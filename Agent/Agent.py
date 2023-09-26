@@ -9,6 +9,7 @@ class Agent:
     # un estado objetivo en el problema realmente
     def __init__(self, initial_state : np.ndarray):
         self.initial_state = initial_state
+        self.espetialsCandys = set()
 
     # Define las acciones posibles dado una matriz de dulces
     # Devuelve una lista de tuplas con: (punto inicial, punto final, costo)
@@ -86,6 +87,12 @@ class Agent:
         matrixCandy = np.copy(originalMatrix)
         valueInit = value
         # Cambia los valores de la matriz a ver que mondá
+        pointToChange = set()
+        for point, color in self.espetialsCandys:
+            if abs(matrixCandy[point[0]][point[1]]-color) != 0x09:
+                pointToChange.add((point, color))
+        self.espetialsCandys = self.espetialsCandys-pointToChange
+
 
         if value == 0:
             pivot = matrixCandy[punto1[0]][punto1[1]]
@@ -98,22 +105,37 @@ class Agent:
         for i in range(0,length):
             countH = set()
             countV = set()
-            for j in range(1,length):    
-                samecandyH, espetialCandyH = self.sameCandy(matrixCandy[i][j], matrixCandy[i][j-1], matrixCandy[i][j-2])     
+            for j in range(2,length):    
+                horizontalCandys = [matrixCandy[i][j-x] for x in range(4)]
+                horizontalCandysPos = [(i,j-x) for x in range(4)]
+
+                samecandyH, espetialCandyH = self.sameCandy(*horizontalCandys[0:3])     
                 if samecandyH and matrixCandy[i][j] != 0x00:
                     countH.add(j)
                     countH.add(j-1)
                     countH.add(j-2)
+                    if (j-3) >= 0:
+                        if self.sameCandy(*horizontalCandys[2:4])[0]:
+                            puntoEspetialCandy = punto1 if punto1 in horizontalCandysPos else punto2
+                            self.espetialsCandys.add((puntoEspetialCandy, matrixCandy[puntoEspetialCandy[0]][puntoEspetialCandy[1]]+9))
+
                 
                 if samecandyH and espetialCandyH:
                     for k in range(length):
                         countH.add(k)
                 
-                samecandyV, espetialCandyV = self.sameCandy(matrixCandy[j][i], matrixCandy[j-1][i], matrixCandy[j-2][i])
+                verticalCandys = [matrixCandy[j-x][i] for x in range(4)]
+                verticalCandysPos = [(j-x,i) for x in range(4)]
+
+                samecandyV, espetialCandyV = self.sameCandy(*verticalCandys[0:3])
                 if samecandyV and matrixCandy[j][i] != 0x00:
                     countV.add(j)
                     countV.add(j-1)
                     countV.add(j-2)
+                    if (j-3) >= 0:
+                        if self.sameCandy(*verticalCandys[2:4])[0]:
+                            puntoEspetialCandy = punto1 if punto1 in verticalCandysPos else punto2
+                            self.espetialsCandys.add((puntoEspetialCandy, matrixCandy[puntoEspetialCandy[0]][puntoEspetialCandy[1]]+9))
 
                 if samecandyV and espetialCandyV:
                     for k in range(length):

@@ -7,6 +7,7 @@ from Agent.Agent import Agent
 import webbrowser
 import asyncio
 import numpy as np
+import random
 
 async def init():
     await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
@@ -28,27 +29,29 @@ async def play():
     c,a,p,sc,prevMatrix,currMatrix = await init()
 
     i = 0
+    limitEqual = 0
     while i < 1000:
         #conseguir acciones desde la pantalla
+        sc.setScreen()
         currMatrix = c.convert()
         
         if np.array_equal(prevMatrix, currMatrix):
-            sc.setScreen()
+            limitEqual += 1
+            if limitEqual == 5:
+                limitEqual = 0
+                p.movimiento(random.choice(a.actions(currMatrix)))
             continue
 
-        print(currMatrix)
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
         
         #si no hay acciones  se vuelve a probar a calcular las acciones
         if len(acciones) == 0:
-            sc.setScreen()
             continue
 
         num_agentes = min(len(acciones), 5)
 
         #top 5 acciones en O(n + k log k)
-        print(num_agentes)
         top_indices = np.argpartition(acciones[:, -1], -num_agentes)[-5:]
 
         mejoresAcciones = acciones[top_indices]
@@ -60,15 +63,13 @@ async def play():
         # mejor movimiento de acuerdo a la euristica
         arr1 = np.array([mejoresAcciones[i][2] for i in range(num_agentes)])
         arr2 = np.array(euristica)
-        resultado = arr1 + arr2
+        arr3 = [[mejoresAcciones[i][1][0] for i in range(num_agentes)]]
+        resultado = arr1 + arr2 + arr3
 
         mejorMovimiento = np.argmax(resultado)
-        print("mejorMovimiento:", mejoresAcciones[mejorMovimiento])
         p.movimiento(mejoresAcciones[mejorMovimiento])
-        i+=1
-
-        sc.setScreen()
         prevMatrix = currMatrix
+        i+=1
 
 async def main():
     await play()
