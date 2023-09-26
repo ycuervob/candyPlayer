@@ -7,7 +7,6 @@ from Agent.Agent import Agent
 import webbrowser
 import asyncio
 import numpy as np
-import random
 
 async def init():
     await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
@@ -15,7 +14,6 @@ async def init():
     await asyncio.sleep(2)
     pointer = Pointer()
     pointer.moveAndClick(750, 350)
-    await asyncio.sleep(25)
     sc = ScreenCapture()
     c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
@@ -26,21 +24,16 @@ async def init():
     return c,a,p,sc,prevMatrix,currMatrix
 
 async def play():
-    c,a,p,sc,prevMatrix,currMatrix = await init()
+    c,a,p,sc,currMatrix = await init()
 
     i = 0
-    limitEqual = 0
+    mejoresAcciones = []
+    mejorMovimiento = ((0,0),(0,0),0)
+    mejorMovimientoPrevio = ((0,0),(0,0),0)
     while i < 1000:
         #conseguir acciones desde la pantalla
         sc.setScreen()
         currMatrix = c.convert()
-        
-        if np.array_equal(prevMatrix, currMatrix):
-            limitEqual += 1
-            if limitEqual == 5:
-                limitEqual = 0
-                p.movimiento(random.choice(a.actions(currMatrix)))
-            continue
 
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
@@ -67,8 +60,14 @@ async def play():
         resultado = arr1 + arr2 + arr3
 
         mejorMovimiento = np.argmax(resultado)
-        p.movimiento(mejoresAcciones[mejorMovimiento])
-        prevMatrix = currMatrix
+        if mejorMovimientoPrevio[0] == mejoresAcciones[mejorMovimiento][0] and mejorMovimientoPrevio[1] == mejoresAcciones[mejorMovimiento][1]:
+            newmejorMovimiento = np.delete(resultado,  mejorMovimiento)
+            otroMejor = np.argmax(newmejorMovimiento)
+            p.movimiento(mejoresAcciones[otroMejor])
+        else:
+            p.movimiento(mejoresAcciones[mejorMovimiento])
+
+        mejorMovimientoPrevio = mejoresAcciones[mejorMovimiento]
         i+=1
 
 async def main():
