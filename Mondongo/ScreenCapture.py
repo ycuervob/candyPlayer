@@ -1,6 +1,6 @@
 import numpy as np
-import pyautogui
 import matplotlib.pyplot as plt
+from PIL import ImageGrab
 
 # Clase de captura de pantalla
 class ScreenCapture:
@@ -9,10 +9,11 @@ class ScreenCapture:
         self.posy = posy
         self.width = width
         self.height = height
-        self.screen = pyautogui.screenshot(region=(self.posx, self.posy, self.width, self.height))
+        
+        self.screen = np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height)))
 
     def setScreen(self):
-        self.screen = pyautogui.screenshot(region=(self.posx, self.posy, self.width, self.height))
+        self.screen = np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height)))
 
     def showScreen(self):
         # Convierte la captura de pantalla a un arreglo NumPy
