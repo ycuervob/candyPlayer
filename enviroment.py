@@ -21,7 +21,7 @@ async def init():
     prevMatrix = np.array([], dtype=np.int8)
     currMatrix = np.array([], dtype=np.int8)
 
-    return c,a,p,sc,prevMatrix,currMatrix
+    return c,a,p,sc,currMatrix
 
 async def play():
     c,a,p,sc,currMatrix = await init()
