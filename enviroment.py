@@ -19,18 +19,25 @@ async def init():
     c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
     p = Player(pointer)
+    prevMatrix = np.array([], dtype=np.int8)
+    currMatrix = np.array([], dtype=np.int8)
 
-    return c,a,p, sc
+    return c,a,p,sc,prevMatrix,currMatrix
 
 async def play():
-    c,a,p,sc = await init()
+    c,a,p,sc,prevMatrix,currMatrix = await init()
 
     i = 0
     while i < 1000:
         #conseguir acciones desde la pantalla
-        matriz = c.convert()
-        print(matriz)
-        acciones = a.actions(matriz)
+        currMatrix = c.convert()
+        
+        if np.array_equal(prevMatrix, currMatrix):
+            sc.setScreen()
+            continue
+
+        print(currMatrix)
+        acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
         
         #si no hay acciones  se vuelve a probar a calcular las acciones
@@ -47,7 +54,7 @@ async def play():
         mejoresAcciones = acciones[top_indices]
 
         #euristica
-        matrices = [a.matrixValue(matriz,mejoresAcciones[i][0],mejoresAcciones[i][1])[1] for i in range(num_agentes)]
+        matrices = [a.matrixValue(currMatrix,mejoresAcciones[i][0],mejoresAcciones[i][1])[1] for i in range(num_agentes)]
         euristica = [a.compute("s",matrices[i])[2] for i in range(num_agentes)]
         
         # mejor movimiento de acuerdo a la euristica
@@ -61,6 +68,7 @@ async def play():
         i+=1
 
         sc.setScreen()
+        prevMatrix = currMatrix
 
 async def main():
     await play()
