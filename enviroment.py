@@ -13,7 +13,7 @@ async def init():
     webbrowser.open("http://127.0.0.1:3006")
     await asyncio.sleep(2)
     pointer = Pointer()
-    pointer.moveAndClick(750, 350)
+    pointer.moveAndClick(700, 350)
     sc = ScreenCapture()
     c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
@@ -34,6 +34,7 @@ async def play():
         #conseguir acciones desde la pantalla
         sc.setScreen()
         currMatrix = c.convert()
+        print(currMatrix)
 
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)

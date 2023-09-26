@@ -97,7 +97,7 @@ class Convertion:
         #Correccion de dulce por tapado 
         middlePoinBloquedCandyX = divisionLength // 2
         middlePoinBloquedCandyY = (3 * divisionWidth + divisionWidth // 2)-15
-        representationArray[0][3]+= self.clasificarColorBasic(image[middlePoinBloquedCandyY-5:middlePoinBloquedCandyY+5, middlePoinBloquedCandyX-5:middlePoinBloquedCandyX+5])            
+        representationArray[0][3] = self.clasificarColorBasic(image[middlePoinBloquedCandyY-5:middlePoinBloquedCandyY+5, middlePoinBloquedCandyX-5:middlePoinBloquedCandyX+5])            
 
         return representationArray
     
