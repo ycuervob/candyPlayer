@@ -60,9 +60,15 @@ async def play():
         resultado = arr1 + arr2 + arr3
 
         mejorMovimiento = np.argmax(resultado)
-        if mejorMovimientoPrevio[0] == mejoresAcciones[mejorMovimiento][0] and mejorMovimientoPrevio[1] == mejoresAcciones[mejorMovimiento][1]:
+        testMismoMovimiento = lambda a,b : a[0] == b[0] and a[1] == b[1] or a[0] == b[1] and a[1] == b[0]
+        if testMismoMovimiento(mejorMovimientoPrevio, mejoresAcciones[mejorMovimiento]):
             newmejorMovimiento = np.delete(resultado,  mejorMovimiento)
             otroMejor = np.argmax(newmejorMovimiento)
+
+            if testMismoMovimiento(mejorMovimientoPrevio, mejoresAcciones[otroMejor]):
+                newmejorMovimiento = np.delete(resultado,  mejorMovimiento)
+                otroMejor = np.argmax(newmejorMovimiento)
+            
             p.movimiento(mejoresAcciones[otroMejor])
         else:
             p.movimiento(mejoresAcciones[mejorMovimiento])
