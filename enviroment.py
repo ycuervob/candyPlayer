@@ -11,7 +11,7 @@ import numpy as np
 async def init():
     await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
     webbrowser.open("http://127.0.0.1:3006")
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     pointer = Pointer()
     pointer.moveAndClick(700, 350)
     sc = ScreenCapture()
