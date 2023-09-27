@@ -34,7 +34,7 @@ async def play():
         #conseguir acciones desde la pantalla
         sc.setScreen()
         currMatrix = c.convert()
-        print(currMatrix)
+        #print(currMatrix)
 
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
@@ -43,10 +43,10 @@ async def play():
         if len(acciones) == 0:
             continue
 
-        num_agentes = min(len(acciones), 5)
+        num_agentes = min(len(acciones), 3)
 
         #top 5 acciones en O(n + k log k)
-        top_indices = np.argpartition(acciones[:, -1], -num_agentes)[-5:]
+        top_indices = np.argpartition(acciones[:, -1], -num_agentes)[-num_agentes:]
 
         mejoresAcciones = acciones[top_indices]
 
@@ -63,14 +63,9 @@ async def play():
         mejorMovimiento = np.argmax(resultado)
         testMismoMovimiento = lambda a,b : a[0] == b[0] and a[1] == b[1] or a[0] == b[1] and a[1] == b[0]
         if testMismoMovimiento(mejorMovimientoPrevio, mejoresAcciones[mejorMovimiento]):
-            newmejorMovimiento = np.delete(resultado,  mejorMovimiento)
-            otroMejor = np.argmax(newmejorMovimiento)
-
-            if testMismoMovimiento(mejorMovimientoPrevio, mejoresAcciones[otroMejor]):
-                newmejorMovimiento = np.delete(resultado,  mejorMovimiento)
-                otroMejor = np.argmax(newmejorMovimiento)
-            
-            p.movimiento(mejoresAcciones[otroMejor])
+            indice_aleatorio = np.random.randint(0, len(acciones))
+            otroMejor = acciones[indice_aleatorio]     
+            p.movimiento(otroMejor)
         else:
             p.movimiento(mejoresAcciones[mejorMovimiento])
 

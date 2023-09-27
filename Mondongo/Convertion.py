@@ -37,20 +37,22 @@ class Convertion:
         # self.arrayCandy = [self.arrayAmarillos, self.arrayNaranjas, self.arrayAzules, self.arrayVerdes, self.arrayMorados, self.arrayRojos]
 
 
-    def clasificarColorBasic(self, pixels):
+    def clasificarColorBasic(self, pixels, squaresize):
         #Creamos un arreglo para obtener los 10x10 tipos de colores de pixeles
-        representationPixels = np.zeros((10,10), dtype=np.int8)
+        pixelIndividual = np.array([0,0,0])
         #Obtenemos el color de cada pixel con la distancia mas corta a los colores
 
-        for i in range(10):
-            for j in range(10):
-                representationPixels[i][j] += self.clasifyOnePixel(pixels[i][j])
+        for i in range(squaresize):
+            for j in range(squaresize):
+                pixelIndividual += pixels[i][j]
+
+        pixelIndividual = pixelIndividual / (squaresize * squaresize)
 
         #Obtenemos el color que mas se repite
-        (unique, counts) = np.unique(representationPixels, return_counts=True)
-        index = np.argmax(counts)
+        #(unique, counts) = np.unique(representationPixels, return_counts=True)
+        #index = np.argmax(counts)
 
-        return unique[index]
+        return self.clasifyOnePixel(pixelIndividual)
 
     def clasifyOnePixel(self, pixel):
         distancia_minima = float('inf')
@@ -87,17 +89,19 @@ class Convertion:
         #Recorremos la imagen en los puntos medios de cada cuadro
         #Esta bien pero falta corregir un error de un candy que queda medio tapado por 
         #Un letrero
+        squaresize = 8
+
         for i in range(9):
             for j in range(9):
                 middlePointX = j * divisionWidth + (divisionWidth // 2)
                 middlePointY = i * divisionLength + (divisionLength // 2)
-                representationPixels = image[middlePointY-5:middlePointY+5, middlePointX-5:middlePointX+5]
-                representationArray[i][j] +=  self.clasificarColorBasic(representationPixels)
+                representationPixels = image[middlePointY-squaresize:middlePointY+squaresize, middlePointX-squaresize:middlePointX+squaresize]
+                representationArray[i][j] +=  self.clasificarColorBasic(representationPixels, squaresize)
 
         #Correccion de dulce por tapado 
         middlePoinBloquedCandyX = divisionLength // 2
         middlePoinBloquedCandyY = (3 * divisionWidth + divisionWidth // 2)-15
-        representationArray[0][3] = self.clasificarColorBasic(image[middlePoinBloquedCandyY-5:middlePoinBloquedCandyY+5, middlePoinBloquedCandyX-5:middlePoinBloquedCandyX+5])            
+        representationArray[0][3] = self.clasificarColorBasic(image[middlePoinBloquedCandyY-squaresize:middlePoinBloquedCandyY+squaresize, middlePoinBloquedCandyX-squaresize:middlePoinBloquedCandyX+squaresize], squaresize)            
 
         return representationArray
     
