@@ -19,12 +19,12 @@ class Convertion:
     def __init__(self, screenCapture, baseRoute =  "Mondongo/imgCandy/", umbral = 0.95):
         self.screenCapture = screenCapture
         self.colors = {
-            0x01: (255, 255, 0),    #amarillo
-            0x02: (255, 128, 0),    #naranja
-            0x03: (0, 0, 255),      #azul
-            0x04: (0, 255, 0),      #verde
-            0x05: (255, 0, 255),    #morado
-            0x06: (255, 0, 0)       #rojo
+            0x01: 30,   #amarillo
+            0x02: 15,   #naranja
+            0x03: 120,  #azul
+            0x04: 60,   #verde
+            0x05: 150,  #morado
+            0x06: 0     #rojo
         }
         self.umbral = umbral
         # self.arraytypes = np.array(["", "E", "E1", "E2"])
@@ -39,28 +39,28 @@ class Convertion:
 
     def clasificarColorBasic(self, pixels, squaresize):
         #Creamos un arreglo para obtener los 10x10 tipos de colores de pixeles
-        pixelIndividual = np.array([0,0,0])
         #Obtenemos el color de cada pixel con la distancia mas corta a los colores
+        closestColors = np.zeros((squaresize, squaresize), dtype=np.int8)
 
         for i in range(squaresize):
             for j in range(squaresize):
-                pixelIndividual += pixels[i][j]
+                closestColors[i][j] = self.clasifyOnePixel(pixels[i][j])
 
-        pixelIndividual = pixelIndividual / (squaresize * squaresize)
+        #Obtenemos el color que mas se repite
+        (unique, counts) = np.unique(closestColors, return_counts=True)
 
         #Obtenemos el color que mas se repite
         #(unique, counts) = np.unique(representationPixels, return_counts=True)
-        #index = np.argmax(counts)
-
-        return self.clasifyOnePixel(pixelIndividual)
+        index = np.argmax(counts)
+        return unique[index]
 
     def clasifyOnePixel(self, pixel):
         distancia_minima = float('inf')
         color_clasificado = None
 
         for nombre_color, valor_color in self.colors.items():
-            # Calcular la distancia euclidiana entre el pixel y el valor RGB del color
-            distancia = np.sqrt(sum(np.power(np.array(pixel) - np.array(valor_color),2)))
+            # Calcular la distancia entre el pixel y el valor H del color
+            distancia = min(abs(pixel[0] - valor_color), 360 - abs(pixel[0] - valor_color))
             
             # Actualizar el color clasificado si la distancia actual es menor
             if distancia < distancia_minima:

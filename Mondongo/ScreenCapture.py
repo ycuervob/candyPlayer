@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import ImageGrab
+import cv2
 
 # Clase de captura de pantalla
 class ScreenCapture:
@@ -9,11 +10,12 @@ class ScreenCapture:
         self.posy = posy
         self.width = width
         self.height = height
-        
-        self.screen = np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height)))
+        rgbscreen = cv2.cvtColor(np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height))), cv2.COLOR_RGB2BGR)    
+        self.screen = np.array(cv2.cvtColor(rgbscreen, cv2.COLOR_BGR2HSV))
 
     def setScreen(self):
-        self.screen = np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height)))
+        rgbscreen = cv2.cvtColor(np.array(ImageGrab.grab(bbox=(self.posx, self.posy, self.posx+self.width, self.posy+self.height))), cv2.COLOR_RGB2BGR)    
+        self.screen = np.array(cv2.cvtColor(rgbscreen, cv2.COLOR_BGR2HSV))
 
     def showScreen(self):
         # Convierte la captura de pantalla a un arreglo NumPy

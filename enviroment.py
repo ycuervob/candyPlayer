@@ -18,7 +18,6 @@ async def init():
     c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
     p = Player(pointer)
-    prevMatrix = np.array([], dtype=np.int8)
     currMatrix = np.array([], dtype=np.int8)
 
     return c,a,p,sc,currMatrix
@@ -34,7 +33,6 @@ async def play():
         #conseguir acciones desde la pantalla
         sc.setScreen()
         currMatrix = c.convert()
-        #print(currMatrix)
 
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
@@ -43,7 +41,7 @@ async def play():
         if len(acciones) == 0:
             continue
 
-        num_agentes = min(len(acciones), 3)
+        num_agentes = min(len(acciones), 5)
 
         #top 5 acciones en O(n + k log k)
         top_indices = np.argpartition(acciones[:, -1], -num_agentes)[-num_agentes:]
@@ -57,8 +55,7 @@ async def play():
         # mejor movimiento de acuerdo a la euristica
         arr1 = np.array([mejoresAcciones[i][2] for i in range(num_agentes)])
         arr2 = np.array(euristica)
-        arr3 = [[mejoresAcciones[i][1][0] for i in range(num_agentes)]]
-        resultado = arr1 + arr2 + arr3
+        resultado = arr1 + arr2
 
         mejorMovimiento = np.argmax(resultado)
         testMismoMovimiento = lambda a,b : a[0] == b[0] and a[1] == b[1] or a[0] == b[1] and a[1] == b[0]
