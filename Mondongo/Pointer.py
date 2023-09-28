@@ -17,6 +17,12 @@ class Pointer:
     def moveAndClick(self, x, y):
         self.move(x, y)
         self.click()
+
+    def press(self, *keys):
+        for key in keys:
+            pyautogui.keyDown(key)
+        for key in keys:
+            pyautogui.keyUp(key)
         
     def click(self):
         pyautogui.click(self.pos)

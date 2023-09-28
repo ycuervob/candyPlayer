@@ -9,11 +9,11 @@ import asyncio
 import numpy as np
 
 async def init():
-    await asyncio.create_subprocess_exec("http-server", "Game", "-p", "3006")
-    webbrowser.open("http://127.0.0.1:3006")
+    await asyncio.create_subprocess_exec("xdg-open", "Game/OLHag1ofTsZg59.swf")
     await asyncio.sleep(3)
     pointer = Pointer()
-    pointer.moveAndClick(700, 350)
+    pointer.press("ctrl", "f")
+    await asyncio.sleep(3)
     sc = ScreenCapture()
     c = Convertion(sc, umbral=0.90)
     a = Agent(np.array([], dtype=np.int8))
@@ -33,6 +33,7 @@ async def play():
         #conseguir acciones desde la pantalla
         sc.setScreen()
         currMatrix = c.convert()
+        print(currMatrix)
 
         acciones = a.actions(currMatrix)
         acciones = np.array(acciones, dtype=object)
