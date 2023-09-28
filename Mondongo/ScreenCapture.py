@@ -5,7 +5,7 @@ import cv2
 
 # Clase de captura de pantalla
 class ScreenCapture:
-    def __init__(self, posx = 100, posy = 10, width = 650, height = 580):
+    def __init__(self, posx = 104, posy = 17, width = 639, height = 567):
         self.posx = posx
         self.posy = posy
         self.width = width
@@ -31,8 +31,8 @@ class ScreenCapture:
 # Test de class
 if __name__ == "__main__":
     #Posiciones absolutas candy
-    x = 100
-    y = 10
+    x = 104
+    y = 17
     width = 650
     height = 580
     sc = ScreenCapture(x, 1080-768 + y, width, height)
